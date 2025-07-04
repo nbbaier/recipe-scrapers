@@ -35,11 +35,12 @@ Establish the core TypeScript architecture, select technology stack, and create 
 -  Node.js compatibility
 -  Modern async/await patterns
 
-**Testing**: Jest + TypeScript
+**Testing**: Vitest + TypeScript
 
--  Comprehensive test runner
--  TypeScript support
+-  Fast unit test runner with Vite integration
+-  Native TypeScript support
 -  Snapshot testing for HTML parsing
+-  Built-in coverage reporting
 
 **Build System**: Vite with TypeScript
 
@@ -314,7 +315,7 @@ class OpenGraphException extends Error {
 -  [ ] Create SchemaOrgParser utility
 -  [ ] Create OpenGraphParser utility
 -  [ ] Implement utility functions
--  [ ] Set up Jest testing framework
+-  [ ] Set up Vitest testing framework
 -  [ ] Create example scraper implementation
 -  [ ] Write comprehensive tests
 -  [ ] Document APIs and architecture
