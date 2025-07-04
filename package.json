@@ -19,7 +19,10 @@
     "test:coverage": "vitest --coverage",
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "migrate": "tsx src/migration/cli.ts",
+    "migrate:setup": "tsx src/migration/cli.ts setup",
+    "migrate:analyze": "tsx src/migration/cli.ts analyze"
   },
   "keywords": [
     "recipe",
@@ -34,7 +37,9 @@
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
     "@vitest/coverage-v8": "^1.0.0",
+    "commander": "^11.0.0",
     "eslint": "^8.0.0",
+    "tsx": "^4.0.0",
     "typescript": "^5.0.0",
     "vite": "^4.0.0",
     "vite-plugin-dts": "^3.0.0",
