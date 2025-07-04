@@ -27,6 +27,10 @@
 -  **Exceptions**: Use `ElementNotFoundInHtml` for missing elements
 -  **Dependencies**: BeautifulSoup4, extruct, isodate (requests for online mode)
 
+## Git Workflow
+
+-  **Commit Strategy**: When a set of changes reaches a logical commit point, spawn a subagent to stage those changes and commit them with a conventional commit message (e.g., `feat: add new scraper`, `fix: handle missing ingredients`, `docs: update migration plan`)
+
 ## TypeScript Migration Plan
 
 See `typescript-migration-plan/` directory for comprehensive migration documentation:
