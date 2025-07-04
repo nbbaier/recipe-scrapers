@@ -1,0 +1,8 @@
+{
+  "pythonScrapersPath": "recipe_scrapers",
+  "typescriptScrapersPath": "src/scrapers",
+  "testDataPath": "tests/scrapers",
+  "generateTests": true,
+  "validateOutput": true,
+  "dryRun": false
+}

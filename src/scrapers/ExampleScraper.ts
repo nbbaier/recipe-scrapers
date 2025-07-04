@@ -1,4 +1,4 @@
-import { AbstractScraper } from "../AbstractScraper.js";
+import { AbstractScraper } from "../core/AbstractScraper.js";
 import { ElementNotFoundError } from "../errors.js";
 
 export class ExampleScraper extends AbstractScraper {
