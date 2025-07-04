@@ -29,14 +29,14 @@
 
 ## Git Workflow
 
--  **Commit Strategy**: When a set of changes reaches a logical commit point, spawn a subagent to stage those changes and commit them with a conventional commit message (e.g., `feat: add new scraper`, `fix: handle missing ingredients`, `docs: update migration plan`)
+**IMPORTANT**: When a set of changes reaches a logical commit point, spawn a subagent to stage those changes and commit them with a conventional commit message (e.g., `feat: add new scraper`, `fix: handle missing ingredients`, `docs: update migration plan`)
 
 ## TypeScript Migration Plan
 
 See `typescript-migration-plan/` directory for comprehensive migration documentation:
 
 -  **[Overview](typescript-migration-plan/README.md)** - Project overview and timeline
--  **[Phase 1: Foundation](typescript-migration-plan/phase1-foundation.md)** - Core architecture setup
+-  **[Phase 1: Foundation](typescript-migration-plan/phase1-foundation.md)** - Core architecture setup ✅
 -  **[Phase 2: Core Implementation](typescript-migration-plan/phase2-core-implementation.md)** - Top 50 scrapers migration
 -  **[Phase 3: Bulk Migration](typescript-migration-plan/phase3-bulk-migration.md)** - 450+ scrapers migration
 -  **[Phase 4: Advanced Features](typescript-migration-plan/phase4-advanced-features.md)** - Plugin system & enhancements
@@ -44,3 +44,15 @@ See `typescript-migration-plan/` directory for comprehensive migration documenta
 -  **[Technical Considerations](typescript-migration-plan/technical-considerations.md)** - Library mappings & challenges
 -  **[Timeline & Metrics](typescript-migration-plan/timeline-and-metrics.md)** - Detailed schedule & success criteria
 -  **[Architecture Overview](typescript-migration-plan/architecture-overview.md)** - TypeScript system design
+
+### Migration Progress Tracking
+
+**IMPORTANT**: Always update the relevant phase plan files (`typescript-migration-plan/phase*.md`) as work progresses:
+
+-  **Task Updates**: Mark tasks as `[x]` when completed, `[ ]` when pending
+-  **Status Updates**: Change phase status from `🔄 Planned` → `🔄 In Progress` → `✅ Completed`
+-  **Implementation Notes**: Add key achievements, challenges, and architectural decisions
+-  **Performance Metrics**: Record build times, test coverage, bundle sizes when available
+-  **Next Steps**: Update "Next Phase" sections to reflect current progress
+
+This ensures accurate tracking of the migration progress and maintains up-to-date documentation for future reference.
