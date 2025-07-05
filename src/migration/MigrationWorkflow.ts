@@ -72,20 +72,13 @@ export class MigrationWorkflow {
 				result.generatedFiles.push(tsFilePath);
 			}
 
-			// Step 4: Generate test file if requested
+			// Step 4: Generate test file if requested (DEPRECATED - tests are now dynamic)
 			if (this.options.generateTests) {
-				console.log(`Generating test for ${scraperName}...`);
-				const testCode = generator.generateTestFile();
-				const testFilePath = join(
-					this.options.testDataPath,
-					`${analysis.className}.test.ts`,
+				console.log(
+					`Note: Test file generation is deprecated. Tests are now dynamically generated from test data.`,
 				);
-
-				if (!this.options.dryRun) {
-					this.ensureDirectoryExists(dirname(testFilePath));
-					writeFileSync(testFilePath, testCode);
-					result.generatedFiles.push(testFilePath);
-				}
+				// Test generation logic removed - tests are now dynamic
+				// See tests/scrapers.test.ts for the new dynamic testing approach
 			}
 
 			// Step 5: Validate output if requested
