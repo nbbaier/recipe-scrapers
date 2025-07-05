@@ -1,17 +1,29 @@
 import { AbstractScraper } from '../core/AbstractScraper';
 import { ElementNotFoundError } from '../core/errors';
 
-export class AllRecipes extends AbstractScraper {
+export class SimplyRecipes extends AbstractScraper {
 	static host(): string {
-    return 'allrecipes.com';
+    return 'simplyrecipes.com';
   }
   
 host(): string | null {
-    const element = this.$('allrecipes.com').first();
+    const element = this.$('simplyrecipes.com').first();
     if (!element.length) {
       return null;
     }
     return this.normalize(element.text());
+  }
+
+  instructions(): string[] {
+    return this.instructionsFromSelector();
+  }
+
+  protected instructionsFromSelector(): string[] {
+    const elements = this.$('div.structured-project__steps li p');
+    if (!elements.length) {
+      throw new ElementNotFoundError('instructions');
+    }
+    return elements.map((_, el) => this.normalize(this.$(el).text())).get();
   }
 
   protected titleFromSelector(): string {
@@ -20,9 +32,5 @@ host(): string | null {
 
   protected ingredientsFromSelector(): string[] {
     throw new ElementNotFoundError('ingredients - implement selector logic');
-  }
-
-  protected instructionsFromSelector(): string[] {
-    throw new ElementNotFoundError('instructions - implement selector logic');
   }
 }

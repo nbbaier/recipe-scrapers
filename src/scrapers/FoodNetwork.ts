@@ -1,29 +1,23 @@
 import { AbstractScraper } from "../core/AbstractScraper";
 import { ElementNotFoundError } from "../core/errors";
 
-export class Epicurious extends AbstractScraper {
-	static host(): string {
-		return "epicurious.com";
+export class FoodNetwork extends AbstractScraper {
+	static hostDomain(domain: string = "co.uk"): string {
+		return `foodnetwork.${domain}`;
 	}
 
-	host(): string | null {
-		const element = this.$("epicurious.com").first();
-		if (!element.length) {
-			return null;
-		}
-		return this.normalize(element.text());
+	host(): string {
+		return FoodNetwork.hostDomain();
 	}
 
 	author(): string | null {
-		return this.schemaOrg.author() || this.authorFromSelector();
+		// TODO: Need to add method to access copyrightNotice from schema.org data
+		// For now, just return the schema.org author
+		return this.schemaOrg.author();
 	}
 
-	protected authorFromSelector(): string | null {
-		const element = this.$("a", "itemprop", "author").first();
-		if (!element.length) {
-			return null;
-		}
-		return this.normalize(element.text());
+	site_name(): string | null {
+		return this.schemaOrg.author();
 	}
 
 	protected titleFromSelector(): string {

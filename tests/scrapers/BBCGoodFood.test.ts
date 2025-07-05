@@ -1,18 +1,18 @@
-import { Epicurious } from '../../src/scrapers/Epicurious';
+import { BBCGoodFood } from '../../src/scrapers/BBCGoodFood';
 import { readFileSync } from 'node:fs';
 import { describe, it, expect, beforeEach } from 'vitest';
 
-describe('Epicurious', () => {
-  let scraper: Epicurious;
+describe('BBCGoodFood', () => {
+  let scraper: BBCGoodFood;
   let html: string;
 
   beforeEach(() => {
-    html = readFileSync('tests/test_data/epicurious.html', 'utf8');
-    scraper = new Epicurious(html, 'epicurious.com/recipe/test');
+    html = readFileSync('tests/test_data/bbcgoodfood.html', 'utf8');
+    scraper = new BBCGoodFood(html, 'bbcgoodfood.com/recipe/test');
   });
 
   it('should have correct host', () => {
-    expect(Epicurious.host()).toBe('epicurious.com');
+    expect(BBCGoodFood.host()).toBe('bbcgoodfood.com');
   });
 
   it('should extract title', () => {

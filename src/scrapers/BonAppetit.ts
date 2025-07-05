@@ -1,17 +1,25 @@
 import { AbstractScraper } from '../core/AbstractScraper';
 import { ElementNotFoundError } from '../core/errors';
 
-export class AllRecipes extends AbstractScraper {
+export class BonAppetit extends AbstractScraper {
 	static host(): string {
-    return 'allrecipes.com';
+    return 'bonappetit.com';
   }
   
 host(): string | null {
-    const element = this.$('allrecipes.com').first();
+    const element = this.$('bonappetit.com').first();
     if (!element.length) {
       return null;
     }
     return this.normalize(element.text());
+  }
+
+  totaltime(): number | null {
+    return this.totaltimeFromSelector();
+  }
+
+  private totaltimeFromSelector(): number | null {
+    return null; // No selectors found
   }
 
   protected titleFromSelector(): string {

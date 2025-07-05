@@ -4,20 +4,23 @@ export class TypeScriptTemplateGenerator {
 	constructor(private analysis: ScraperAnalysis) {}
 
 	generate(): string {
-		const imports = this.generateImports();
-		const classDeclaration = this.generateClassDeclaration();
-		const hostMethod = this.generateHostMethod();
-		const methods = this.generateMethods();
-
-		return `${imports}
+	const imports = this.generateImports();
+	const classDeclaration = this.generateClassDeclaration();
+	const hostMethod = this.generateHostMethod();
+	const methods = this.generateMethods();
+	const requiredMethods = this.generateRequiredAbstractMethods();
+	
+    return `${imports}
 
 ${classDeclaration}
-  ${hostMethod}
-
+	${hostMethod}
+  
 ${methods}
+
+${requiredMethods}
 }
 `.trim();
-	}
+  }
 
 	private generateImports(): string {
 		const baseImports = [
@@ -335,6 +338,35 @@ ${methods}
 			default:
 				return `return null; // No selectors found`;
 		}
+	}
+
+	private generateRequiredAbstractMethods(): string {
+		const requiredMethods = ['title', 'ingredients', 'instructions'];
+		const implementedMethods = this.analysis.methods.map(m => m.name);
+		const missingMethods = requiredMethods.filter(method => !implementedMethods.includes(method));
+
+		if (missingMethods.length === 0) {
+			return '';
+		}
+
+		return missingMethods.map(methodName => {
+			switch (methodName) {
+				case 'title':
+					return `  protected titleFromSelector(): string {
+    throw new ElementNotFoundError('title - implement selector logic');
+  }`;
+				case 'ingredients':
+					return `  protected ingredientsFromSelector(): string[] {
+    throw new ElementNotFoundError('ingredients - implement selector logic');
+  }`;
+				case 'instructions':
+					return `  protected instructionsFromSelector(): string[] {
+    throw new ElementNotFoundError('instructions - implement selector logic');
+  }`;
+				default:
+					return '';
+			}
+		}).join('\n\n');
 	}
 
 	generateTestFile(): string {

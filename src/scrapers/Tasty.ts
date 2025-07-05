@@ -1,13 +1,21 @@
 import { AbstractScraper } from '../core/AbstractScraper';
 import { ElementNotFoundError } from '../core/errors';
 
-export class AllRecipes extends AbstractScraper {
+export class Tasty extends AbstractScraper {
 	static host(): string {
-    return 'allrecipes.com';
+    return 'tasty.co';
   }
   
 host(): string | null {
-    const element = this.$('allrecipes.com').first();
+    const element = this.$('tasty.co').first();
+    if (!element.length) {
+      return null;
+    }
+    return this.normalize(element.text());
+  }
+
+  ingredient_groups(): string | null {
+    const element = this.$('.ingredient-section-name', '.ingredient').first();
     if (!element.length) {
       return null;
     }

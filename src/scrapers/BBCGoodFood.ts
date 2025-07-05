@@ -1,13 +1,21 @@
 import { AbstractScraper } from '../core/AbstractScraper';
 import { ElementNotFoundError } from '../core/errors';
 
-export class AllRecipes extends AbstractScraper {
+export class BBCGoodFood extends AbstractScraper {
 	static host(): string {
-    return 'allrecipes.com';
+    return 'bbcgoodfood.com';
   }
   
 host(): string | null {
-    const element = this.$('allrecipes.com').first();
+    const element = this.$('bbcgoodfood.com').first();
+    if (!element.length) {
+      return null;
+    }
+    return this.normalize(element.text());
+  }
+
+  ingredient_groups(): string | null {
+    const element = this.$('.recipe__ingredients h3', '.recipe__ingredients li').first();
     if (!element.length) {
       return null;
     }
