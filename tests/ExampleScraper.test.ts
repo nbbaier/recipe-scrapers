@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { ExampleScraper } from "../src/scrapers/ExampleScraper.js";
+import { ExampleScraper } from "@/scrapers/ExampleScraper.js";
 
 describe("ExampleScraper", () => {
 	let scraper: ExampleScraper;

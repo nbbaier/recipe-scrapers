@@ -1,36 +1,33 @@
-import { AbstractScraper } from '../core/AbstractScraper';
-import { ElementNotFoundError } from '../core/errors';
+import { AbstractScraper } from "@/core/AbstractScraper";
+import { ElementNotFoundError } from "@/core/errors";
 
 export class BonAppetit extends AbstractScraper {
 	static host(): string {
-    return 'bonappetit.com';
-  }
-  
-host(): string | null {
-    const element = this.$('bonappetit.com').first();
-    if (!element.length) {
-      return null;
-    }
-    return this.normalize(element.text());
-  }
+		return "bonappetit.com";
+	}
 
-  totaltime(): number | null {
-    return this.totaltimeFromSelector();
-  }
+	host(): string {
+		const element = this.$("bonappetit.com").first();
+		return this.normalize(element.text());
+	}
 
-  private totaltimeFromSelector(): number | null {
-    return null; // No selectors found
-  }
+	totaltime(): number | null {
+		return this.totaltimeFromSelector();
+	}
 
-  protected titleFromSelector(): string {
-    throw new ElementNotFoundError('title - implement selector logic');
-  }
+	private totaltimeFromSelector(): number | null {
+		return null; // No selectors found
+	}
 
-  protected ingredientsFromSelector(): string[] {
-    throw new ElementNotFoundError('ingredients - implement selector logic');
-  }
+	protected titleFromSelector(): string {
+		throw new ElementNotFoundError("title - implement selector logic");
+	}
 
-  protected instructionsFromSelector(): string[] {
-    throw new ElementNotFoundError('instructions - implement selector logic');
-  }
+	protected ingredientsFromSelector(): string[] {
+		throw new ElementNotFoundError("ingredients - implement selector logic");
+	}
+
+	protected instructionsFromSelector(): string[] {
+		throw new ElementNotFoundError("instructions - implement selector logic");
+	}
 }

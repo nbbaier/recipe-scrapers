@@ -6,7 +6,6 @@ from recipe_scrapers._utils import get_abstract_methods
 
 
 class TestJsonOrder(unittest.TestCase):
-
     def test_json_key_order(self):
         correct_order = get_abstract_methods()
         json_directory = "tests/test_data/"

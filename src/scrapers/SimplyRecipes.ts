@@ -1,36 +1,33 @@
-import { AbstractScraper } from '../core/AbstractScraper';
-import { ElementNotFoundError } from '../core/errors';
+import { AbstractScraper } from "@/core/AbstractScraper";
+import { ElementNotFoundError } from "@/core/errors";
 
 export class SimplyRecipes extends AbstractScraper {
 	static host(): string {
-    return 'simplyrecipes.com';
-  }
-  
-host(): string | null {
-    const element = this.$('simplyrecipes.com').first();
-    if (!element.length) {
-      return null;
-    }
-    return this.normalize(element.text());
-  }
+		return "simplyrecipes.com";
+	}
 
-  instructions(): string[] {
-    return this.instructionsFromSelector();
-  }
+	host(): string {
+		const element = this.$("simplyrecipes.com").first();
+		return this.normalize(element.text());
+	}
 
-  protected instructionsFromSelector(): string[] {
-    const elements = this.$('div.structured-project__steps li p');
-    if (!elements.length) {
-      throw new ElementNotFoundError('instructions');
-    }
-    return elements.map((_, el) => this.normalize(this.$(el).text())).get();
-  }
+	instructions(): string[] {
+		return this.instructionsFromSelector();
+	}
 
-  protected titleFromSelector(): string {
-    throw new ElementNotFoundError('title - implement selector logic');
-  }
+	protected instructionsFromSelector(): string[] {
+		const elements = this.$("div.structured-project__steps li p");
+		if (!elements.length) {
+			throw new ElementNotFoundError("instructions");
+		}
+		return elements.map((_, el) => this.normalize(this.$(el).text())).get();
+	}
 
-  protected ingredientsFromSelector(): string[] {
-    throw new ElementNotFoundError('ingredients - implement selector logic');
-  }
+	protected titleFromSelector(): string {
+		throw new ElementNotFoundError("title - implement selector logic");
+	}
+
+	protected ingredientsFromSelector(): string[] {
+		throw new ElementNotFoundError("ingredients - implement selector logic");
+	}
 }

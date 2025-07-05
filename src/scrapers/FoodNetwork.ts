@@ -1,8 +1,12 @@
-import { AbstractScraper } from "../core/AbstractScraper";
-import { ElementNotFoundError } from "../core/errors";
+import { AbstractScraper } from "@/core/AbstractScraper";
+import { ElementNotFoundError } from "@/core/errors";
 
 export class FoodNetwork extends AbstractScraper {
 	static hostDomain(domain: string = "co.uk"): string {
+		return `foodnetwork.${domain}`;
+	}
+
+	static host(domain: string = "co.uk"): string {
 		return `foodnetwork.${domain}`;
 	}
 

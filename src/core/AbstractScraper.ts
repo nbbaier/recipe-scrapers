@@ -1,8 +1,8 @@
 import * as cheerio from "cheerio";
-import { OpenGraphParser } from "../parsers/opengraph.js";
-import { SchemaOrgParser } from "../parsers/schema-org.js";
-import type { RecipeData } from "../types.js";
-import { parseISO8601Duration, parseTimeText } from "../utils/time.js";
+import { OpenGraphParser } from "@/parsers/opengraph.js";
+import { SchemaOrgParser } from "@/parsers/schema-org.js";
+import type { RecipeData } from "@/types.js";
+import { parseISO8601Duration, parseTimeText } from "@/utils/time.js";
 
 export abstract class AbstractScraper {
 	protected html: string;

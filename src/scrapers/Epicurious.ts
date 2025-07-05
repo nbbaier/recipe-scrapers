@@ -1,16 +1,13 @@
-import { AbstractScraper } from "../core/AbstractScraper";
-import { ElementNotFoundError } from "../core/errors";
+import { AbstractScraper } from "@/core/AbstractScraper";
+import { ElementNotFoundError } from "@/core/errors";
 
 export class Epicurious extends AbstractScraper {
 	static host(): string {
 		return "epicurious.com";
 	}
 
-	host(): string | null {
+	host(): string {
 		const element = this.$("epicurious.com").first();
-		if (!element.length) {
-			return null;
-		}
 		return this.normalize(element.text());
 	}
 

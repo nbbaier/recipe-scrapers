@@ -6,7 +6,6 @@ from recipe_scrapers._utils import get_nutrition_keys
 
 
 class TestNutritionKeyOrder(unittest.TestCase):
-
     def test_nutrition_key_order(self):
         nutrition_keys = get_nutrition_keys()
         json_directory = "tests/test_data/"

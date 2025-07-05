@@ -56,3 +56,7 @@ See `typescript-migration-plan/` directory for comprehensive migration documenta
 -  **Next Steps**: Update "Next Phase" sections to reflect current progress
 
 This ensures accurate tracking of the migration progress and maintains up-to-date documentation for future reference.
+
+### typescript testing
+
+**IMPORTANT**: when running tests on the typescript codebase, use `npx vitest run` instead of `npm run test`
