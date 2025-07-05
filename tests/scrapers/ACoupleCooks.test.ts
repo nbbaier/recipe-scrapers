@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { beforeEach, describe, expect, it } from "vitest";
-import { ACoupleCooks } from "../../src/scrapers/ACoupleCooks";
+import { ACoupleCooks } from "@/scrapers/ACoupleCooks";
 
 describe("ACoupleCooks", () => {
 	let scraper: ACoupleCooks;
@@ -8,7 +8,7 @@ describe("ACoupleCooks", () => {
 
 	beforeEach(() => {
 		html = readFileSync(
-			"tests/test_data/acouplecooks.com/acouplecooks.test.html",
+			"tests/test_data/acouplecooks.com/acouplecooks_1.test.html",
 			"utf8",
 		);
 		scraper = new ACoupleCooks(html, "acouplecooks.com/recipe/test");

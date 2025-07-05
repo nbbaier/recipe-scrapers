@@ -4,33 +4,33 @@ export class TypeScriptTemplateGenerator {
 	constructor(private analysis: ScraperAnalysis) {}
 
 	generate(): string {
-	const imports = this.generateImports();
-	const classDeclaration = this.generateClassDeclaration();
-	const hostMethod = this.generateHostMethod();
-	const methods = this.generateMethods();
-	const requiredMethods = this.generateRequiredAbstractMethods();
-	
-    return `${imports}
+		const imports = this.generateImports();
+		const classDeclaration = this.generateClassDeclaration();
+		const hostMethod = this.generateHostMethod();
+		const methods = this.generateMethods();
+		const requiredMethods = this.generateRequiredAbstractMethods();
+
+		return `${imports}
 
 ${classDeclaration}
 	${hostMethod}
-  
+
 ${methods}
 
 ${requiredMethods}
 }
 `.trim();
-  }
+	}
 
 	private generateImports(): string {
 		const baseImports = [
-			"import { AbstractScraper } from '../core/AbstractScraper';",
-			"import { ElementNotFoundError } from '../core/errors';",
+			"import { AbstractScraper } from '@/core/AbstractScraper';",
+			"import { ElementNotFoundError } from '@/core/errors';",
 		];
 
 		// Add conditional imports based on analysis
 		if (this.analysis.complexity === "complex") {
-			baseImports.push("import { parseTimeText } from '../utils/time';");
+			baseImports.push("import { parseTimeText } from '@/utils/time';");
 		}
 
 		return baseImports.join("\n");
@@ -341,36 +341,49 @@ ${requiredMethods}
 	}
 
 	private generateRequiredAbstractMethods(): string {
-		const requiredMethods = ['title', 'ingredients', 'instructions'];
-		const implementedMethods = this.analysis.methods.map(m => m.name);
-		const missingMethods = requiredMethods.filter(method => !implementedMethods.includes(method));
+		const requiredMethods = ["title", "ingredients", "instructions"];
+		const implementedMethods = this.analysis.methods.map((m) => m.name);
+		const missingMethods = requiredMethods.filter(
+			(method) => !implementedMethods.includes(method),
+		);
 
 		if (missingMethods.length === 0) {
-			return '';
+			return "";
 		}
 
-		return missingMethods.map(methodName => {
-			switch (methodName) {
-				case 'title':
-					return `  protected titleFromSelector(): string {
+		return missingMethods
+			.map((methodName) => {
+				switch (methodName) {
+					case "title":
+						return `  protected titleFromSelector(): string {
     throw new ElementNotFoundError('title - implement selector logic');
   }`;
-				case 'ingredients':
-					return `  protected ingredientsFromSelector(): string[] {
+					case "ingredients":
+						return `  protected ingredientsFromSelector(): string[] {
     throw new ElementNotFoundError('ingredients - implement selector logic');
   }`;
-				case 'instructions':
-					return `  protected instructionsFromSelector(): string[] {
+					case "instructions":
+						return `  protected instructionsFromSelector(): string[] {
     throw new ElementNotFoundError('instructions - implement selector logic');
   }`;
-				default:
-					return '';
-			}
-		}).join('\n\n');
+					default:
+						return "";
+				}
+			})
+			.join("\n\n");
+	}
+
+	private getSiteNameFromHost(hostName: string): string {
+		// Remove common TLDs to get the site name
+		// e.g., "acouplecooks.com" -> "acouplecooks"
+		//       "allrecipes.com" -> "allrecipes"
+		//       "epicurious.com" -> "epicurious"
+		return hostName.replace(/\.(com|co|org|net|edu|gov|mil|info|biz|io)$/i, '');
 	}
 
 	generateTestFile(): string {
-		return `import { ${this.analysis.className} } from '../../src/scrapers/${this.analysis.className}';
+		const siteName = this.getSiteNameFromHost(this.analysis.hostName);
+		return `import { ${this.analysis.className} } from '@/scrapers/${this.analysis.className}';
 import { readFileSync } from 'node:fs';
 import { describe, it, expect, beforeEach } from 'vitest';
 
@@ -379,7 +392,7 @@ describe('${this.analysis.className}', () => {
   let html: string;
 
   beforeEach(() => {
-    html = readFileSync('tests/test_data/${this.analysis.className.toLowerCase()}.html', 'utf8');
+    html = readFileSync('tests/test_data/${this.analysis.hostName}/${siteName}.test.html', 'utf8');
     scraper = new ${this.analysis.className}(html, '${this.analysis.hostName}/recipe/test');
   });
 
