@@ -1,4 +1,4 @@
-import { BonAppetit } from '../../src/scrapers/BonAppetit';
+import { BonAppetit } from '@/scrapers/BonAppetit';
 import { readFileSync } from 'node:fs';
 import { describe, it, expect, beforeEach } from 'vitest';
 
@@ -7,7 +7,7 @@ describe('BonAppetit', () => {
   let html: string;
 
   beforeEach(() => {
-    html = readFileSync('tests/test_data/bonappetit.html', 'utf8');
+    html = readFileSync('tests/test_data/bonappetit.com/bonappetit.test.html', 'utf8');
     scraper = new BonAppetit(html, 'bonappetit.com/recipe/test');
   });
 

@@ -1,4 +1,4 @@
-import { Tasty } from '../../src/scrapers/Tasty';
+import { Tasty } from '@/scrapers/Tasty';
 import { readFileSync } from 'node:fs';
 import { describe, it, expect, beforeEach } from 'vitest';
 
@@ -7,7 +7,7 @@ describe('Tasty', () => {
   let html: string;
 
   beforeEach(() => {
-    html = readFileSync('tests/test_data/tasty.html', 'utf8');
+    html = readFileSync('tests/test_data/tasty.co/tasty_1.test.html', 'utf8');
     scraper = new Tasty(html, 'tasty.co/recipe/test');
   });
 

@@ -1,4 +1,4 @@
-import { MarthaStewart } from '../../src/scrapers/MarthaStewart';
+import { MarthaStewart } from '@/scrapers/MarthaStewart';
 import { readFileSync } from 'node:fs';
 import { describe, it, expect, beforeEach } from 'vitest';
 
@@ -7,7 +7,7 @@ describe('MarthaStewart', () => {
   let html: string;
 
   beforeEach(() => {
-    html = readFileSync('tests/test_data/marthastewart.html', 'utf8');
+    html = readFileSync('tests/test_data/marthastewart.com/marthastewart.test.html', 'utf8');
     scraper = new MarthaStewart(html, 'marthastewart.com/recipe/test');
   });
 

@@ -1,4 +1,4 @@
-import { Epicurious } from '../../src/scrapers/Epicurious';
+import { Epicurious } from '@/scrapers/Epicurious';
 import { readFileSync } from 'node:fs';
 import { describe, it, expect, beforeEach } from 'vitest';
 
@@ -7,7 +7,7 @@ describe('Epicurious', () => {
   let html: string;
 
   beforeEach(() => {
-    html = readFileSync('tests/test_data/epicurious.html', 'utf8');
+    html = readFileSync('tests/test_data/epicurious.com/epicurious.test.html', 'utf8');
     scraper = new Epicurious(html, 'epicurious.com/recipe/test');
   });
 
