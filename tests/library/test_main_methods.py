@@ -14,7 +14,6 @@ from recipe_scrapers._utils import get_host_name
 
 
 class TestMainMethods(unittest.TestCase):
-
     def test_valid_call_formats(self):
         test_html = "<!-- load this variable with the HTML from the URL below -->"
         test_url = "https://en.wikibooks.org/wiki/Cookbook:B%C3%A9chamel_Sauce_(Beeton)"
@@ -74,7 +73,7 @@ class TestMainMethods(unittest.TestCase):
     @mock.patch("recipe_scrapers.requests.get")
     def test_online_mode_html_retrieval(self, mock_get):
         recipe_html = pathlib.Path(
-            "tests/test_data/recipe-scrapers.example/online.testhtml"
+            "tests/test_data/recipe-scrapers.example/online.test.html"
         )
         mock_get.return_value = mock.MagicMock()
         mock_get.return_value.text = recipe_html.read_text()

@@ -177,7 +177,7 @@ def prepare_test_cases():
         if not host.is_dir():
             continue
 
-        for testhtml in host.glob("*.testhtml"):
+        for testhtml in host.glob("*.test.html"):
             testjson = testhtml.with_suffix(".json")
             if not testjson.is_file():
                 continue

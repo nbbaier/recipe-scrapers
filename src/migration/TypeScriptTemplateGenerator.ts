@@ -338,8 +338,8 @@ ${methods}
 	}
 
 	generateTestFile(): string {
-		return `import { ${this.analysis.className} } from '../${this.analysis.className}';
-import { readFileSync } from 'fs';
+		return `import { ${this.analysis.className} } from '../../src/scrapers/${this.analysis.className}';
+import { readFileSync } from 'node:fs';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 describe('${this.analysis.className}', () => {
