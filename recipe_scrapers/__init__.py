@@ -18,7 +18,7 @@ from urllib.request import urlopen, Request
 try:
     # requests is an optional dependency; we can provide better error messages
     # when we know that it's unavailable before a user attempts a web request
-    import requests
+    import requests  # type: ignore
 except ImportError as e:
     requests_import_error: Exception | None = e
 else:

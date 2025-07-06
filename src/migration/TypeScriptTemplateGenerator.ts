@@ -43,14 +43,25 @@ ${requiredMethods}
 	private generateHostMethod(): string {
 		return `static host(): string {
     return '${this.analysis.hostName}';
+  }
+
+  host(): string {
+    return ${this.analysis.className}.host();
   }`;
 	}
 
 	private generateMethods(): string {
-		return this.analysis.methods
-			.filter((method) => !method.name.startsWith("_"))
+		const methodNames = this.analysis.methods.map((m) => m.name);
+		const requiredStubs = [];
+		if (!methodNames.includes("instructions_list"))
+			requiredStubs.push(this.generateInstructionsListMethod());
+		const generated = this.analysis.methods
+			.filter(
+				(method) => !method.name.startsWith("_") && method.name !== "host",
+			)
 			.map((method) => this.generateMethod(method))
 			.join("\n\n  ");
+		return [generated, ...requiredStubs, this.generateToJson()].join("\n\n  ");
 	}
 
 	private generateMethod(method: MethodAnalysis): string {
@@ -103,7 +114,8 @@ ${requiredMethods}
 	private generateIngredientsMethod(method: MethodAnalysis): string {
 		if (method.schemaProperties.includes("recipeIngredient")) {
 			return `ingredients(): string[] {
-    return this.schemaOrg.ingredients() || this.ingredientsFromSelector();
+    const value = this.schemaOrg.ingredients() || this.ingredientsFromSelector();
+    return this.normalizeOutput(value, 'ingredients');
   }
 
   protected ingredientsFromSelector(): string[] {
@@ -111,7 +123,8 @@ ${requiredMethods}
   }`;
 		} else {
 			return `ingredients(): string[] {
-    return this.ingredientsFromSelector();
+    const value = this.ingredientsFromSelector();
+    return this.normalizeOutput(value, 'ingredients');
   }
 
   protected ingredientsFromSelector(): string[] {
@@ -123,7 +136,8 @@ ${requiredMethods}
 	private generateInstructionsMethod(method: MethodAnalysis): string {
 		if (method.schemaProperties.includes("recipeInstructions")) {
 			return `instructions(): string[] {
-    return this.schemaOrg.instructions() || this.instructionsFromSelector();
+    const value = this.schemaOrg.instructions() || this.instructionsFromSelector();
+    return this.normalizeOutput(value, 'instructions');
   }
 
   protected instructionsFromSelector(): string[] {
@@ -131,7 +145,8 @@ ${requiredMethods}
   }`;
 		} else {
 			return `instructions(): string[] {
-    return this.instructionsFromSelector();
+    const value = this.instructionsFromSelector();
+    return this.normalizeOutput(value, 'instructions');
   }
 
   protected instructionsFromSelector(): string[] {
@@ -170,7 +185,8 @@ ${requiredMethods}
 	private generateYieldsMethod(method: MethodAnalysis): string {
 		if (method.schemaProperties.includes("recipeYield")) {
 			return `yields(): string | null {
-    return this.schemaOrg.yields() || this.yieldsFromSelector();
+    const value = this.schemaOrg.yields() || this.yieldsFromSelector();
+    return this.normalizeOutput(value, 'yields');
   }
 
   private yieldsFromSelector(): string | null {
@@ -178,7 +194,8 @@ ${requiredMethods}
   }`;
 		} else {
 			return `yields(): string | null {
-    return this.yieldsFromSelector();
+    const value = this.yieldsFromSelector();
+    return this.normalizeOutput(value, 'yields');
   }
 
   private yieldsFromSelector(): string | null {
@@ -307,21 +324,21 @@ ${requiredMethods}
 			case "author":
 				return `const element = this.$(${selectorList}).first();
     if (!element.length) {
-      return null;
+      throw new ElementNotFoundError('author');
     }
     return this.normalize(element.text());`;
 
 			case "description":
 				return `const element = this.$(${selectorList}).first();
     if (!element.length) {
-      return null;
+      throw new ElementNotFoundError('description');
     }
     return this.normalize(element.text());`;
 
 			default:
 				return `const element = this.$(${selectorList}).first();
     if (!element.length) {
-      return null;
+      throw new ElementNotFoundError('element not found');
     }
     return this.normalize(element.text());`;
 		}
@@ -378,7 +395,7 @@ ${requiredMethods}
 		// e.g., "acouplecooks.com" -> "acouplecooks"
 		//       "allrecipes.com" -> "allrecipes"
 		//       "epicurious.com" -> "epicurious"
-		return hostName.replace(/\.(com|co|org|net|edu|gov|mil|info|biz|io)$/i, '');
+		return hostName.replace(/\.(com|co|org|net|edu|gov|mil|info|biz|io)$/i, "");
 	}
 
 	generateTestFile(): string {
@@ -439,5 +456,45 @@ describe('${this.analysis.className}', () => {
   // });
 });
 `;
+	}
+
+	private generateInstructionsListMethod(): string {
+		return `instructions_list(): string[] {
+			const value = this.instructions();
+			return this.normalizeOutput(value, 'instructions_list');
+		}`;
+	}
+
+	private generateToJson(): string {
+		return `toJSON() {
+			const result: any = {};
+			result.author = this.author ? this.author() : null;
+			result.canonicalUrl = this.canonicalUrl ? this.canonicalUrl() : null;
+			result.siteName = this.siteName ? this.siteName() : null;
+			result.host = this.host();
+			result.language = this.language ? this.language() : null;
+			result.title = this.title();
+			result.ingredients = this.ingredients();
+			result.ingredient_groups = this.ingredient_groups ? this.ingredient_groups() : null;
+			result.instructions = this.instructions();
+			result.instructions_list = this.instructions_list ? this.instructions_list() : null;
+			result.category = this.category ? this.category() : null;
+			result.yields = this.yields();
+			result.description = this.description ? this.description() : null;
+			result.total_time = this.total_time ? this.total_time() : null;
+			result.cook_time = this.cook_time ? this.cook_time() : null;
+			result.prep_time = this.prep_time ? this.prep_time() : null;
+			result.cuisine = this.cuisine ? this.cuisine() : null;
+			result.cooking_method = this.cooking_method ? this.cooking_method() : null;
+			result.ratings = this.ratings ? this.ratings() : null;
+			result.ratings_count = this.ratings_count ? this.ratings_count() : null;
+			result.equipment = this.equipment ? this.equipment() : null;
+			result.reviews = this.reviews ? this.reviews() : null;
+			result.nutrients = this.nutrients ? this.nutrients() : null;
+			result.dietary_restrictions = this.dietary_restrictions ? this.dietary_restrictions() : null;
+			result.image = this.image();
+			result.keywords = this.keywords ? this.keywords() : null;
+			return result;
+		}`;
 	}
 }

@@ -1,6 +1,13 @@
 import { execSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { basename, dirname, join } from "node:path";
+import {
+	basename,
+	dirname,
+	join,
+	dirname as pathDirname,
+	resolve,
+} from "node:path";
+import { fileURLToPath } from "node:url";
 import { PythonAstParser, type ScraperAnalysis } from "./PythonAstParser";
 import { TypeScriptTemplateGenerator } from "./TypeScriptTemplateGenerator";
 
@@ -37,6 +44,143 @@ export class MigrationWorkflow {
 	constructor(options: MigrationOptions) {
 		this.parser = new PythonAstParser();
 		this.options = options;
+	}
+
+	private updateScrapersRegistry(className: string, hostName: string) {
+		const __filename = fileURLToPath(import.meta.url);
+		const __dirname = pathDirname(__filename);
+		const indexPath = resolve(__dirname, "../index.ts");
+		let indexContent = readFileSync(indexPath, "utf8");
+		let changed = false;
+
+		const importLine = `import { ${className} } from "./scrapers/${className}.js";`;
+		if (!indexContent.includes(importLine)) {
+			const importRegex = /import \{ [^}]+ \} from ".\/scrapers\/[^"]+";/g;
+			const matches = [...indexContent.matchAll(importRegex)];
+			const lastScraperImport =
+				matches.length > 0 ? matches[matches.length - 1] : undefined;
+			if (lastScraperImport && typeof lastScraperImport.index === "number") {
+				const insertPos = lastScraperImport.index + lastScraperImport[0].length;
+				indexContent =
+					indexContent.slice(0, insertPos) +
+					"\n" +
+					importLine +
+					indexContent.slice(insertPos);
+				changed = true;
+			} else {
+				const lastImportPos = indexContent.lastIndexOf("import ");
+				const nextLine = indexContent.indexOf("\n", lastImportPos);
+				indexContent =
+					indexContent.slice(0, nextLine + 1) +
+					importLine +
+					"\n" +
+					indexContent.slice(nextLine + 1);
+				changed = true;
+			}
+		}
+
+		const tldMatch = hostName.match(/^(.*?)(\.[a-z]+)$/i);
+		let baseDomain = hostName;
+		if (tldMatch?.[1]) {
+			baseDomain = tldMatch[1];
+		}
+		const testDataRoot = resolve(process.cwd(), "tests/test_data");
+		let tldDomains: string[] = [];
+		try {
+			const allDirs = existsSync(testDataRoot)
+				? require("node:fs").readdirSync(testDataRoot)
+				: [];
+			tldDomains = allDirs.filter((dir: string) =>
+				dir.startsWith(baseDomain + "."),
+			);
+		} catch {
+			// ignore
+		}
+		// Filter out invalid hostnames (e.g., .DS_Store, empty strings)
+		function isValidHostName(host: string): boolean {
+			return !!host && !host.startsWith('.') && host.includes('.') && !/^\s*$/.test(host);
+		}
+
+		if (!tldDomains.includes(hostName)) {
+			tldDomains.push(hostName);
+		}
+		tldDomains = Array.from(new Set(tldDomains)).filter(isValidHostName);
+		if (tldDomains.length > 1) {
+			console.warn(
+				`⚠️  Multiple TLDs found for base domain '${baseDomain}': ${tldDomains.join(", ")}. Adding all to SCRAPERS registry.`,
+			);
+		}
+
+		// Only add host keys that are not already present in the registry
+		const registryRegex =
+			/export const SCRAPERS: Record<string, typeof AbstractScraper> = \{([\s\S]*?)\n\};/m;
+		const registryMatch = indexContent.match(registryRegex);
+		let registryBlock = registryMatch && typeof registryMatch[1] === "string" ? registryMatch[1] : "";
+		const missingDomains = tldDomains.filter(domain => !registryBlock.includes(`"${domain}": ${className},`));
+		if (missingDomains.length === 0) {
+			// All valid host keys already present, do not modify registry
+			if (changed) {
+				writeFileSync(indexPath, indexContent);
+			}
+			console.log(`SCRAPERS registry already up to date for ${tldDomains.join(", ")}`);
+			return;
+		}
+		missingDomains.forEach((domain) => {
+			if (!isValidHostName(domain)) return;
+			const hostKey = `  "${domain}": ${className},\n`;
+			const closingBraceIndex = indexContent.indexOf(
+				"};",
+				registryMatch ? registryMatch.index : 0,
+			);
+			if (closingBraceIndex !== -1) {
+				indexContent =
+					indexContent.slice(0, closingBraceIndex) +
+					hostKey +
+					indexContent.slice(closingBraceIndex);
+				registryBlock += hostKey;
+				changed = true;
+			}
+		});
+
+		const exportBlockRegex = /export \{([\s\S]*?)\n\};/m;
+		const exportBlockMatch = indexContent.match(exportBlockRegex);
+		if (exportBlockMatch && typeof exportBlockMatch[1] === "string") {
+			const exportBlock = exportBlockMatch[1];
+			if (!exportBlock.includes(className)) {
+				const closingBraceIndex = indexContent.indexOf(
+					"};",
+					exportBlockMatch.index,
+				);
+				if (closingBraceIndex !== -1) {
+					const exportLine = `  ${className},\n`;
+					indexContent =
+						indexContent.slice(0, closingBraceIndex) +
+						exportLine +
+						indexContent.slice(closingBraceIndex);
+					changed = true;
+				}
+			}
+		}
+
+		if (changed && !this.options.dryRun) {
+			writeFileSync(indexPath, indexContent);
+			console.log(
+				`✅ Updated SCRAPERS registry in src/index.ts for ${tldDomains.join(", ")}`,
+			);
+		} else if (changed && this.options.dryRun) {
+			console.warn(
+				`⚠️  (dry run) Please add the following to src/index.ts for all TLDs:`,
+			);
+			tldDomains.forEach((domain) => {
+				console.warn(`In SCRAPERS: "${domain}": ${className},`);
+			});
+			console.warn(importLine);
+			console.warn(`In export block: ${className},`);
+		} else if (!changed) {
+			console.log(
+				`SCRAPERS registry already up to date for ${tldDomains.join(", ")}`,
+			);
+		}
 	}
 
 	async migrateScraper(pythonFilePath: string): Promise<MigrationResult> {
@@ -98,6 +242,11 @@ export class MigrationWorkflow {
 			console.log(
 				`${result.success ? "✅" : "❌"} ${scraperName} migration ${result.success ? "completed" : "failed"}`,
 			);
+
+			// Step 6: Update SCRAPERS registry if migration was successful
+			if (result.success) {
+				this.updateScrapersRegistry(analysis.className, analysis.hostName);
+			}
 		} catch (error) {
 			result.errors.push(`Migration failed: ${error}`);
 			console.error(`❌ ${scraperName} migration failed:`, error);

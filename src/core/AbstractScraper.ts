@@ -100,11 +100,54 @@ export abstract class AbstractScraper {
 	}
 
 	canonicalUrl(): string | null {
-		return this.canonicalUrlFromSelector();
+		const canonical = this.$('link[rel="canonical"]').attr("href");
+		if (canonical) {
+			try {
+				return new URL(canonical, this.url).toString();
+			} catch {
+				return canonical;
+			}
+		}
+		return this.url;
+	}
+
+	language(): string | null {
+		const htmlTag = this.$("html[lang]");
+		if (htmlTag.length) {
+			const lang = htmlTag.attr("lang");
+			if (typeof lang === "string") return lang;
+			return null;
+		}
+		const metaLanguage = this.$('meta[http-equiv="content-language"][content]');
+		if (metaLanguage.length) {
+			const content = metaLanguage.attr("content");
+			if (typeof content === "string") {
+				return content.split(",")[0] ?? null;
+			}
+		}
+		return null;
 	}
 
 	siteName(): string | null {
-		return this.openGraph.siteName() || this.siteNameFromSelector();
+		try {
+			const ogSiteName =
+				this.$('meta[property="og:site_name"]').attr("content") ||
+				this.$('meta[name="og:site_name"]').attr("content");
+			if (ogSiteName != null) return ogSiteName;
+		} catch {}
+		if (
+			this.schemaOrg &&
+			typeof (this.schemaOrg as any).siteName === "function"
+		) {
+			const schemaSiteName = (this.schemaOrg as any).siteName();
+			if (schemaSiteName != null) return schemaSiteName;
+		}
+		try {
+			const urlObj = new URL(this.url);
+			return urlObj.hostname.replace(/^www\./, "");
+		} catch {
+			return null;
+		}
 	}
 
 	datePublished(): string | null {
@@ -173,15 +216,6 @@ export abstract class AbstractScraper {
 		return null;
 	}
 
-	protected canonicalUrlFromSelector(): string | null {
-		const canonical = this.$('link[rel="canonical"]').attr("href");
-		return canonical || null;
-	}
-
-	protected siteNameFromSelector(): string | null {
-		return null;
-	}
-
 	protected datePublishedFromSelector(): string | null {
 		return null;
 	}
@@ -207,6 +241,61 @@ export abstract class AbstractScraper {
 		return new URL(url, baseUrl.origin).toString();
 	}
 
+	protected normalizeOutput(value: any, type: string): any {
+		if (value == null) return null;
+		if (type === "yields") {
+			if (Array.isArray(value) && value.length === 1) value = value[0];
+			if (typeof value === "number") return `${value} servings`;
+			if (typeof value === "string") return value.trim();
+			return String(value).trim();
+		}
+		if (type === "instructions_list") {
+			if (Array.isArray(value)) {
+				return value.map((v) =>
+					typeof v === "string" ? this.decodeHtml(v).trim() : v,
+				);
+			}
+			if (typeof value === "string") {
+				return value
+					.split("\n")
+					.map((v) => this.decodeHtml(v).trim())
+					.filter(Boolean);
+			}
+			return [];
+		}
+		if (type === "instructions") {
+			if (Array.isArray(value)) {
+				return value.map((v) =>
+					typeof v === "string" ? this.decodeHtml(v).trim() : v,
+				);
+			}
+			if (typeof value === "string") {
+				return [this.decodeHtml(value).trim()];
+			}
+			return [];
+		}
+		if (Array.isArray(value)) {
+			return value.map((v) =>
+				typeof v === "string" ? this.decodeHtml(v).trim() : v,
+			);
+		}
+		if (typeof value === "string") {
+			return this.decodeHtml(value).trim();
+		}
+		return value;
+	}
+
+	protected decodeHtml(html: string): string {
+		if (!html) return "";
+		return html
+			.replace(/&nbsp;/g, " ")
+			.replace(/&amp;/g, "&")
+			.replace(/&lt;/g, "<")
+			.replace(/&gt;/g, ">")
+			.replace(/&quot;/g, '"')
+			.replace(/&#39;/g, "'");
+	}
+
 	// Convert to JSON
 	toJSON(): RecipeData {
 		const result: RecipeData = {
@@ -215,7 +304,6 @@ export abstract class AbstractScraper {
 			instructions: this.instructions(),
 		};
 
-		// Add optional fields only if they have values
 		const totalTime = this.totalTime();
 		if (totalTime !== null) result.totalTime = totalTime;
 
