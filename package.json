@@ -1,54 +1,54 @@
 {
-  "name": "recipe-scrapers-ts",
-  "version": "1.0.0",
-  "description": "TypeScript port of recipe-scrapers library",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "type": "module",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    }
-  },
-  "scripts": {
-    "build": "vite build",
-    "dev": "vite",
-    "test": "vitest",
-    "test:watch": "vitest --watch",
-    "test:coverage": "vitest --coverage",
-    "lint": "eslint src --ext .ts,.tsx",
-    "lint:fix": "eslint src --ext .ts,.tsx --fix",
-    "type-check": "tsc --noEmit",
-    "migrate": "tsx src/migration/cli.ts",
-    "migrate:setup": "tsx src/migration/cli.ts setup",
-    "migrate:analyze": "tsx src/migration/cli.ts analyze"
-  },
-  "keywords": [
-    "recipe",
-    "scraper",
-    "parser",
-    "typescript"
-  ],
-  "author": "",
-  "license": "MIT",
-  "devDependencies": {
-    "@types/node": "^20.0.0",
-    "@typescript-eslint/eslint-plugin": "^6.0.0",
-    "@typescript-eslint/parser": "^6.0.0",
-    "@vitest/coverage-v8": "^1.0.0",
-    "commander": "^11.0.0",
-    "eslint": "^8.0.0",
-    "tsx": "^4.0.0",
-    "typescript": "^5.0.0",
-    "vite": "^4.0.0",
-    "vite-plugin-dts": "^3.0.0",
-    "vitest": "^1.0.0"
-  },
-  "dependencies": {
-    "cheerio": "^1.0.0-rc.12",
-    "dayjs": "^1.11.0",
-    "jsonld": "^8.3.0",
-    "node-fetch": "^3.3.0"
-  }
+	"name": "recipe-scrapers-ts",
+	"version": "1.0.0",
+	"description": "TypeScript port of recipe-scrapers library",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"type": "module",
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
+		}
+	},
+	"scripts": {
+		"build": "vite build",
+		"dev": "vite",
+		"test": "vitest",
+		"test:watch": "vitest --watch",
+		"test:coverage": "vitest --coverage",
+		"lint": "eslint src --ext .ts,.tsx",
+		"lint:fix": "eslint src --ext .ts,.tsx --fix",
+		"type-check": "tsc --noEmit",
+		"migrate": "tsx src/migration/cli.ts",
+		"migrate:setup": "tsx src/migration/cli.ts setup",
+		"migrate:analyze": "tsx src/migration/cli.ts analyze"
+	},
+	"keywords": [
+		"recipe",
+		"scraper",
+		"parser",
+		"typescript"
+	],
+	"author": "",
+	"license": "MIT",
+	"devDependencies": {
+		"@types/node": "^20.0.0",
+		"@typescript-eslint/eslint-plugin": "^6.0.0",
+		"@typescript-eslint/parser": "^6.0.0",
+		"@vitest/coverage-v8": "^1.0.0",
+		"commander": "^11.0.0",
+		"eslint": "^8.0.0",
+		"tsx": "^4.0.0",
+		"typescript": "^5.0.0",
+		"vite": "^4.0.0",
+		"vite-plugin-dts": "^3.0.0",
+		"vitest": "^1.0.0"
+	},
+	"dependencies": {
+		"cheerio": "^1.0.0-rc.12",
+		"dayjs": "^1.11.0",
+		"jsonld": "^8.3.0",
+		"node-fetch": "^3.3.0"
+	}
 }
