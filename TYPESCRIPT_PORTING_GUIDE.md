@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document provides a comprehensive architectural analysis of the Python recipe-scrapers library to guide its port to TypeScript. The library is a sophisticated recipe extraction system supporting 400+ cooking websites through a unified abstraction layer.
+This document provides a comprehensive architectural analysis of the Python recipe-scrapers library to guide its port to TypeScript. The library is a sophisticated **recipe** extraction system supporting 400+ cooking websites through a unified abstraction layer.
 
 ## Core Architecture
 
