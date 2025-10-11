@@ -64,9 +64,61 @@ A comprehensive validation system to compare TypeScript and Python scraper outpu
 - `scripts/run-validation.ts` - Standalone validation script
 - `test-pattern1.mjs` - Test pattern utilities
 
-### Documentation
-- `TYPESCRIPT_PORT_COMPLETE_PROGRESS.md` - Comprehensive progress report
-- `VALIDATION_FRAMEWORK_PROGRESS.md` - Validation framework documentation
+### Documentation & Migration History
+- `TYPESCRIPT_PORT_COMPLETE_PROGRESS.md` - **Primary migration documentation** (872 lines)
+- `VALIDATION_FRAMEWORK_PROGRESS.md` - Validation framework documentation (317 lines)
+- `tests/comparison/framework.md` - Framework usage guide (58 lines)
+
+## Migration Documentation Details
+
+This branch contains **comprehensive planning and progress documentation** that should be preserved when reconciling branches:
+
+### 📄 TYPESCRIPT_PORT_COMPLETE_PROGRESS.md (Primary Document)
+**Purpose:** Complete historical record of the TypeScript port planning and execution
+
+**Key Sections:**
+- Executive Summary - Overall project status and scope
+- Python Codebase Analysis - Breakdown of 506 scrapers by complexity pattern
+- Porting Timeline - Phased approach and time estimates
+- TypeScript Infrastructure - Complete build system and architecture documentation
+- Implemented Scrapers - Detailed docs for each of the 5 completed scrapers
+- Validation Framework Architecture - Full technical documentation
+- Test Data Infrastructure - Test coverage and metrics
+- Implementation Patterns - Code examples for each pattern type
+- Quality Assurance Results - Validation scores and field coverage
+- Development Workflow - Step-by-step implementation process
+- Performance Considerations - Benchmarks and optimization strategies
+- Future Roadmap - Phased rollout plan
+- Project Statistics - Code metrics and test coverage
+- Risk Assessment - Identified risks and mitigation strategies
+- Lessons Learned - Technical and process insights
+
+**Value:** This is the **master reference document** for understanding the entire migration strategy, technical decisions, and progress tracking.
+
+### 📄 VALIDATION_FRAMEWORK_PROGRESS.md
+**Purpose:** Detailed documentation of the validation framework built to ensure Python/TypeScript parity
+
+**Key Sections:**
+- Framework component architecture
+- Test data discovery system
+- Python/TypeScript comparison engine
+- Reporting system capabilities
+- CLI usage and integration
+- Recommended porting workflow
+- Technical implementation details
+
+**Value:** Essential for understanding how quality assurance was implemented and how to use the validation tools.
+
+### 📄 tests/comparison/framework.md
+**Purpose:** Quick reference guide for using the validation framework
+
+**Key Sections:**
+- Test data structure overview
+- Framework components summary
+- CLI usage examples
+- Implementation plan
+
+**Value:** Practical usage guide for developers working with the validation system.
 
 ## Key Accomplishments
 
@@ -204,3 +256,25 @@ Based on pattern analysis:
 This branch represents a solid foundation for the TypeScript port with proven quality (97.6% validation score), comprehensive tooling, and a clear path forward for porting the remaining 501 scrapers. The validation framework ensures confidence in maintaining functional parity throughout the migration process.
 
 **Status: Foundation Complete, Ready for Production Porting**
+
+---
+
+## 📚 For Knowledge Base Reconciliation
+
+**When consolidating migration documentation across branches, prioritize these files from this branch:**
+
+1. **TYPESCRIPT_PORT_COMPLETE_PROGRESS.md** - Contains the master migration plan, technical architecture documentation, pattern analysis of all 506 Python scrapers, implementation examples, and quality metrics. This is the single most important planning/history document.
+
+2. **VALIDATION_FRAMEWORK_PROGRESS.md** - Documents the validation approach and tooling used to ensure quality during porting. Critical for understanding the QA strategy.
+
+3. **tests/comparison/framework.md** - Practical guide for validation framework usage.
+
+**These documents answer:**
+- Why was this approach chosen?
+- How were the 506 scrapers analyzed and categorized?
+- What is the implementation strategy for the remaining 501 scrapers?
+- How is quality being ensured during migration?
+- What are the performance and technical considerations?
+- What lessons were learned from the first 5 implementations?
+
+**Branch Context:** This is the foundational TypeScript port branch with initial infrastructure, validation framework, and proof-of-concept scrapers.
