@@ -13,17 +13,19 @@ This branch contains comprehensive planning and documentation for porting the re
 All migration planning documentation for this branch is located in the following files:
 
 ### Primary Documentation Files
-- **[TYPESCRIPT_PORTING_GUIDE.md](./TYPESCRIPT_PORTING_GUIDE.md)** - Main architectural analysis and technical strategy (217 lines)
-- **[migration-phases/](./migration-phases/)** - Detailed 4-phase implementation plans (4 phase documents + index)
-  - [README.md](./migration-phases/README.md) - Phase index and complexity legend (20 lines)
-  - [phase-1-core-infrastructure.md](./migration-phases/phase-1-core-infrastructure.md) - Foundation & plugin system (131 lines)
-  - [phase-2-data-extraction.md](./migration-phases/phase-2-data-extraction.md) - Schema.org & OpenGraph helpers (127 lines)
-  - [phase-3-scraper-implementation.md](./migration-phases/phase-3-scraper-implementation.md) - Site-specific scrapers (171 lines)
-  - [phase-4-optimization-polish.md](./migration-phases/phase-4-optimization-polish.md) - Performance & production ready (290 lines)
-- **[AGENT.md](./AGENT.md)** - Development workflow guide for agents/developers (27 lines)
+
+-  **[TYPESCRIPT_PORTING_GUIDE.md](./TYPESCRIPT_PORTING_GUIDE.md)** - Main architectural analysis and technical strategy (217 lines)
+-  **[migration-phases/](./migration-phases/)** - Detailed 4-phase implementation plans (4 phase documents + index)
+   -  [README.md](./migration-phases/README.md) - Phase index and complexity legend (20 lines)
+   -  [phase-1-core-infrastructure.md](./migration-phases/phase-1-core-infrastructure.md) - Foundation & plugin system (131 lines)
+   -  [phase-2-data-extraction.md](./migration-phases/phase-2-data-extraction.md) - Schema.org & OpenGraph helpers (127 lines)
+   -  [phase-3-scraper-implementation.md](./migration-phases/phase-3-scraper-implementation.md) - Site-specific scrapers (171 lines)
+   -  [phase-4-optimization-polish.md](./migration-phases/phase-4-optimization-polish.md) - Performance & production ready (290 lines)
+-  **[AGENT.md](./AGENT.md)** - Development workflow guide for agents/developers (27 lines)
 
 ### This Summary Document
-- **[BRANCH_SUMMARY.md](./BRANCH_SUMMARY.md)** - This file; high-level branch overview and documentation index
+
+-  **[BRANCH_SUMMARY.md](./BRANCH_SUMMARY.md)** - This file; high-level branch overview and documentation index
 
 **Total Migration Documentation**: ~983 lines across 7 markdown files
 
@@ -34,7 +36,7 @@ When reconciling with other branches, note that this branch's migration docs fol
 ```
 recipe-scrapers/
 ├── TYPESCRIPT_PORTING_GUIDE.md          # START HERE: Architectural overview
-├── AGENT.md                              # Development commands & guidelines  
+├── AGENT.md                              # Development commands & guidelines
 ├── BRANCH_SUMMARY.md                     # This file: Branch status & doc index
 └── migration-phases/                     # Detailed implementation plans
     ├── README.md                         # Phase overview & complexity legend
@@ -45,12 +47,13 @@ recipe-scrapers/
 ```
 
 **Key Topics Covered**:
-- TypeScript architectural patterns (Proxy-based plugins, type safety)
-- Python → TypeScript dependency mapping (beautifulsoup4 → cheerio, extruct → custom JSON-LD)
-- 4-phase implementation timeline (50-66 days total)
-- Technical challenges and solutions
-- Testing strategy (fixture-based, >90% coverage)
-- Build system (ESM/CJS, browser/node support)
+
+-  TypeScript architectural patterns (Proxy-based plugins, type safety)
+-  Python → TypeScript dependency mapping (beautifulsoup4 → cheerio, extruct → custom JSON-LD)
+-  4-phase implementation timeline (50-66 days total)
+-  Technical challenges and solutions
+-  Testing strategy (fixture-based, >90% coverage)
+-  Build system (ESM/CJS, browser/node support)
 
 ## Files Created
 
