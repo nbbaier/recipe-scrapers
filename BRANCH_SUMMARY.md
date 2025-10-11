@@ -120,29 +120,173 @@ This branch contains the initial foundation work for migrating the recipe-scrape
   - `epicurious.testhtml` → `epicurious.test.html`
   - `editionslarousse_1.testhtml` → `editionslarousse_1.test.html`
 
-## Documentation
+## 📚 Migration Documentation & Knowledge Base
 
-### Migration Plans Created
+> **Important**: All migration documentation is located in the `typescript-migration-plan/` directory. This section provides a comprehensive map of what's been documented for easy knowledge base integration.
 
-1. **README.md** - Overview and timeline
-2. **architecture-overview.md** - TypeScript system design
-3. **phase1-foundation.md** - Core architecture (✅ Completed)
-4. **phase2-core-implementation.md** - Top 50 scrapers migration plan
-5. **phase3-bulk-migration.md** - 450+ scrapers migration plan
-6. **phase4-advanced-features.md** - Plugin system & enhancements
-7. **phase5-infrastructure.md** - Packaging & deployment
-8. **technical-considerations.md** - Library mappings & challenges
-9. **timeline-and-metrics.md** - Detailed schedule & success criteria
-10. **revised-testing-strategy.md** - Testing approach for TypeScript
+### Documentation Directory Structure
 
-### Agent Documentation
+```
+typescript-migration-plan/
+├── README.md                           # Master migration overview
+├── architecture-overview.md            # System design & architecture decisions  
+├── phase1-foundation.md               # ✅ Phase 1 implementation details
+├── phase2-core-implementation.md      # Phase 2 planning (top 50 scrapers)
+├── phase3-bulk-migration.md           # Phase 3 planning (bulk migration)
+├── phase4-advanced-features.md        # Phase 4 planning (plugins & features)
+├── phase5-infrastructure.md           # Phase 5 planning (packaging & deploy)
+├── technical-considerations.md        # Tech stack decisions & trade-offs
+├── timeline-and-metrics.md            # Schedule, milestones & success metrics
+└── revised-testing-strategy.md        # TypeScript testing methodology
+```
 
-**AGENT.md** - Comprehensive guide for AI agents including:
-- Commands for testing, building, linting
-- Architecture overview
-- Code style guidelines
-- Git workflow instructions
-- TypeScript migration tracking guidelines
+### Documentation Map for Knowledge Base Integration
+
+#### **1. Project Overview & Context**
+- **File**: `typescript-migration-plan/README.md`
+- **Contains**: 
+  - Migration motivation and goals
+  - High-level project timeline (6-month estimate)
+  - Phase breakdown summary
+  - Current status at time of branch creation
+  - Links to all other documentation
+
+#### **2. Technical Architecture & Design**
+- **File**: `typescript-migration-plan/architecture-overview.md`
+- **Contains**:
+  - Complete TypeScript system design
+  - AbstractScraper class architecture
+  - Parser utilities design (Schema.org, OpenGraph)
+  - Type system definitions
+  - Error handling patterns
+  - Code organization strategy
+  - **Key for**: Understanding design decisions made in Phase 1
+
+#### **3. Implementation Progress & Achievements**
+- **File**: `typescript-migration-plan/phase1-foundation.md`
+- **Status**: ✅ **COMPLETED**
+- **Contains**:
+  - Detailed Phase 1 deliverables
+  - Code examples of implemented components
+  - Technology stack selections with rationale
+  - Success criteria and completion notes
+  - Performance metrics (build: 440ms, tests: 67ms, bundle: 8.69 kB)
+  - **Key for**: Understanding what was actually built and works
+
+#### **4. Future Work Planning**
+- **Phase 2**: `typescript-migration-plan/phase2-core-implementation.md`
+  - Top 50 scraper migration plan
+  - Priority ordering by popularity
+  - Testing pattern establishment
+  
+- **Phase 3**: `typescript-migration-plan/phase3-bulk-migration.md`
+  - Bulk migration strategy for 450+ scrapers
+  - Automation tooling usage
+  - Quality assurance approach
+
+- **Phase 4**: `typescript-migration-plan/phase4-advanced-features.md`
+  - Plugin system design
+  - Advanced features roadmap
+  - Extensibility patterns
+
+- **Phase 5**: `typescript-migration-plan/phase5-infrastructure.md`
+  - Packaging strategy (dual ESM/CJS)
+  - Deployment pipeline
+  - Publishing workflow
+  - Documentation site setup
+
+#### **5. Technical Decision Records**
+- **File**: `typescript-migration-plan/technical-considerations.md`
+- **Contains**:
+  - Python library → TypeScript library mappings
+  - BeautifulSoup → Cheerio migration guide
+  - isodate → Day.js conversion patterns
+  - Challenges and solutions
+  - **Key for**: Understanding why specific technologies were chosen
+
+#### **6. Project Management**
+- **File**: `typescript-migration-plan/timeline-and-metrics.md`
+- **Contains**:
+  - Detailed 6-month timeline breakdown
+  - Phase durations and dependencies
+  - Success metrics and KPIs
+  - Risk assessment
+  - Resource allocation
+
+#### **7. Testing Strategy**
+- **File**: `typescript-migration-plan/revised-testing-strategy.md`
+- **Contains**:
+  - Vitest configuration and approach
+  - Test file organization (`.test.ts`, `.test.html`)
+  - Coverage requirements
+  - Snapshot testing patterns
+  - Migration test strategy
+
+#### **8. Developer Guide**
+- **File**: `AGENT.md` (root directory)
+- **Contains**:
+  - Quick reference for commands (test, build, lint, migrate)
+  - Code style guidelines
+  - Git workflow conventions
+  - Migration progress tracking guidelines
+  - **Key for**: Day-to-day development tasks
+
+### Key Decisions & Rationale Documented
+
+The following architectural decisions are documented across the migration plans:
+
+1. **Cheerio over JSDOM** (`technical-considerations.md`)
+   - Better performance for parsing-only tasks
+   - Familiar jQuery-like API
+
+2. **Vitest over Jest** (`phase1-foundation.md`)
+   - Native TypeScript support
+   - Faster execution with Vite integration
+
+3. **Day.js over Moment.js** (`technical-considerations.md`)
+   - Lightweight (~2KB vs ~60KB)
+   - Modern immutable API
+
+4. **Dual Package Support** (`phase5-infrastructure.md`)
+   - ESM for modern tooling
+   - CommonJS for legacy compatibility
+
+5. **Strict TypeScript** (`architecture-overview.md`)
+   - All strict checks enabled
+   - Proper null handling patterns
+
+### Migration Automation Documentation
+
+The migration tooling is documented in:
+- **Implementation**: Code in `src/migration/` directory
+- **Usage Guide**: `AGENT.md` (migrate commands section)
+- **Architecture**: `phase2-core-implementation.md` (migration automation section)
+
+Tools include:
+- `MigrationWorkflow.ts` - Orchestrates Python→TypeScript conversion
+- `PythonAstParser.ts` - Analyzes Python scraper structure  
+- `TypeScriptTemplateGenerator.ts` - Generates TS code and tests
+- `cli.ts` - Command-line interface
+
+### Test Data Documentation
+
+- **Location**: `tests/test_data/[site-name]/`
+- **Format**: `.test.html` files (renamed from `.testhtml` in this branch)
+- **Purpose**: Real HTML from recipe sites for integration testing
+- **Coverage**: 771 test files across hundreds of recipe sites
+
+### For Knowledge Base Integration
+
+When consolidating documentation from multiple branches:
+
+1. **Start with**: `typescript-migration-plan/README.md` for overview
+2. **Reference**: `architecture-overview.md` for design decisions
+3. **Check progress**: `phase1-foundation.md` for what's implemented
+4. **Find rationale**: `technical-considerations.md` for "why" decisions
+5. **Plan future work**: Phase 2-5 documents for roadmap
+6. **Developer onboarding**: `AGENT.md` for quick start
+
+All files use Markdown with consistent structure, making them suitable for integration into a unified knowledge base or documentation site.
 
 ## Configuration Files
 
