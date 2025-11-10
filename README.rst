@@ -92,6 +92,27 @@ You can also get the full list programmatically with:
     SCRAPERS.keys()
 
 
+TypeScript Port
+---------------
+🚧 **Under Active Development**
+
+A TypeScript port of recipe-scrapers is currently being developed in the ``typescript/`` directory
+of this repository. The goal is to achieve 100% API parity with the Python version.
+
+**Status:** In development
+**Target:** Complete 1:1 functionality port
+**Documentation:** See `typescript/README.md <typescript/README.md>`_
+
+Once the TypeScript port achieves full parity and stability, it will be extracted to its own
+repository and published to npm as a standalone package.
+
+If you're interested in the TypeScript version, check out:
+
+* `TYPESCRIPT_PORT_PLAN.md <TYPESCRIPT_PORT_PLAN.md>`_ - Overall port strategy
+* `APPROACH_4_HYBRID.md <APPROACH_4_HYBRID.md>`_ - Detailed implementation plan
+* ``typescript/`` directory - Work in progress
+
+
 Contributing
 ------------
 We welcome contributions! Please read our
