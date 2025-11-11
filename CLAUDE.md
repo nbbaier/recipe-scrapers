@@ -25,11 +25,11 @@ A **TypeScript port** is currently under active development in the `typescript/`
 
 The TypeScript port is intentionally being developed **within** the Python repository to:
 
-✅ Provide easy reference to Python implementations
-✅ Share test data (`tests/test_data/`) for true parity validation
-✅ Enable side-by-side comparison of outputs
-✅ Access git history to understand how issues were resolved
-✅ Validate 100% parity before extraction to separate repo
+- ✅ Provide easy reference to Python implementations
+- ✅ Share test data (`tests/test_data/`) for true parity validation
+- ✅ Enable side-by-side comparison of outputs
+- ✅ Access git history to understand how issues were resolved
+- ✅ Validate 100% parity before extraction to separate repo
 
 ### Key TypeScript Documentation
 
