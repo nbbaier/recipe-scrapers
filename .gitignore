@@ -140,3 +140,12 @@ Temporary Items
 # Editor configs
 .vscode
 .idea
+
+# TypeScript / Node.js
+typescript/node_modules/
+typescript/dist/
+typescript/coverage/
+typescript/*.tsbuildinfo
+typescript/.eslintcache
+typescript/parity-report.json
+*.log
