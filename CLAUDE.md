@@ -17,9 +17,11 @@ This document provides context and guidance for AI assistants (like Claude) work
 
 A **TypeScript port** is currently under active development in the `typescript/` directory. This is a significant effort to achieve **100% API parity** with the Python version, bringing recipe-scrapers functionality to the Node.js/TypeScript ecosystem.
 
-**Status:** Foundation phase - core architecture being built
+**Status:** Phase 0/1 (Foundation) - ~5% complete
+**Progress:** Project scaffolding complete, core implementation not yet started
 **Approach:** [Hybrid Approach (APPROACH_4_HYBRID.md)](typescript/APPROACH_4_HYBRID.md)
 **Goal:** Complete 1:1 functionality port, then extract to separate npm package
+**Detailed Status:** See [typescript/STATUS.md](typescript/STATUS.md) for comprehensive progress tracking
 
 ### Why Development Happens Here
 
@@ -33,29 +35,43 @@ The TypeScript port is intentionally being developed **within** the Python repos
 
 ### Key TypeScript Documentation
 
-If working on the TypeScript port, review these files:
+If working on the TypeScript port, review these files in order:
 
-1. **[typescript/README.md](typescript/README.md)** - TypeScript port overview and quick start
-2. **[typescript/TYPESCRIPT_PORT_PLAN.md](typescript/TYPESCRIPT_PORT_PLAN.md)** - Overall strategy and requirements
-3. **[typescript/APPROACH_4_HYBRID.md](typescript/APPROACH_4_HYBRID.md)** - Detailed implementation plan
-4. **[typescript/APPROACH_1_PYTHON_REPO.md](typescript/APPROACH_1_PYTHON_REPO.md)** - Alternative approach analysis
+1. **[typescript/STATUS.md](typescript/STATUS.md)** ⭐ **START HERE!** Current implementation status and detailed progress
+2. **[typescript/DEVELOPMENT.md](typescript/DEVELOPMENT.md)** - Development guide and workflow
+3. **[typescript/README.md](typescript/README.md)** - TypeScript port overview and quick start
+4. **[typescript/TYPESCRIPT_PORT_PLAN.md](typescript/TYPESCRIPT_PORT_PLAN.md)** - Overall strategy (reference)
+
+**Note:** The `APPROACH_*.md` files in typescript/ are archived planning documents. The chosen approach is Hybrid (develop here, extract later) as documented in STATUS.md.
 
 ### Current TypeScript Structure
 
 ```
 typescript/
 ├── src/
-│   ├── exceptions.ts       # Custom error classes
+│   ├── exceptions.ts       # ✅ Custom error classes (COMPLETE)
 │   ├── types/
-│   │   └── recipe.ts       # TypeScript type definitions
-│   └── index.ts           # Main entry point
-├── tests/                 # Test files (uses ../tests/test_data/)
+│   │   └── recipe.ts       # ✅ TypeScript type definitions (COMPLETE)
+│   └── index.ts            # ⚠️ Main entry point (placeholder only)
+│   # ❌ NOT YET IMPLEMENTED:
+│   # ├── scrapers/         # Abstract scraper, parsers (TODO)
+│   # ├── plugins/          # Plugin system (TODO)
+│   # ├── utils/            # Utility functions (TODO)
+│   # └── factory.ts        # Factory pattern (TODO)
+├── tests/
+│   ├── helpers/
+│   │   └── test-data.ts    # ✅ Test data loading (COMPLETE)
+│   └── unit/
+│       └── test-data.test.ts  # ✅ Helper tests (COMPLETE)
 ├── scripts/
-│   ├── compare-outputs.ts  # Compare Python vs TypeScript outputs
-│   └── validate-parity.ts  # Full parity validation
-├── package.json           # Dependencies and scripts
-├── tsconfig.json          # TypeScript configuration
-└── jest.config.js         # Test configuration
+│   ├── compare-outputs.ts  # ⚠️ Scaffolded but not functional yet
+│   └── validate-parity.ts  # ⚠️ Scaffolded but not functional yet
+├── docs/                   # Approach documents (for reference)
+├── package.json            # ✅ Dependencies and scripts (COMPLETE)
+├── tsconfig.json           # ✅ TypeScript configuration (COMPLETE)
+├── jest.config.js          # ✅ Test configuration (COMPLETE)
+├── STATUS.md               # 📊 Current status tracking (NEW!)
+└── README.md               # 📚 Overview
 ```
 
 ### TypeScript Development Workflow
@@ -202,14 +218,30 @@ See [Python Contributing Guide](https://docs.recipe-scrapers.com/contributing/ho
 
 ### Current Development Phase
 
-The TypeScript port is in **Phase 1: Foundation**. Key priorities:
+The TypeScript port is in **Phase 0/1: Foundation** (~5% complete). Current status:
 
-- [ ] Core utilities (`_utils.ts`)
-- [ ] Schema.org parser (starting with JSON-LD)
+**Completed ✅**
+- [x] Project scaffolding and build tooling
+- [x] Type definitions (Recipe, IngredientGroup, Nutrients)
+- [x] Exception classes (all 5 custom exceptions)
+- [x] Test data helpers (load HTML and JSON from shared test data)
+- [x] Development environment setup (TypeScript, Jest, ESLint, Prettier)
+
+**Next Up (Priority Order) 🚧**
+- [ ] Core utilities (duration parsing, normalization, yield parsing)
+- [ ] Schema.org parser (starting with JSON-LD only)
 - [ ] OpenGraph parser
 - [ ] Abstract scraper base class
 - [ ] Plugin system architecture
-- [ ] First 10 priority scrapers
+- [ ] First 10 priority scrapers (allrecipes, foodnetwork, etc.)
+
+**Not Started ❌**
+- All 518 site-specific scrapers
+- Factory pattern and scraper registry
+- Functional parity validation scripts
+- Complete documentation
+
+**See [typescript/STATUS.md](typescript/STATUS.md) for detailed breakdown of progress.**
 
 ### Adding TypeScript Functionality
 
@@ -342,6 +374,6 @@ The Python implementation is the source of truth. The TypeScript port should:
 
 ---
 
-**Last Updated:** 2025-11-11
-**Python Version:** Active development
-**TypeScript Version:** 0.1.0 (Foundation phase)
+**Last Updated:** 2025-11-12
+**Python Version:** Active development (stable, 518+ scrapers)
+**TypeScript Version:** 0.1.0-alpha (Foundation phase, ~5% complete)
