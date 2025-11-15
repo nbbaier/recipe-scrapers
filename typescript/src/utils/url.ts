@@ -75,20 +75,50 @@ export function getHostName(url: string): string {
 
 /**
  * Extracts the last segment (slug) from a URL path.
+ * Treats single-segment paths ending with '/' as directories (returns empty string).
+ * Multi-segment paths return the last segment, even if they end with '/'.
  *
  * @param url - The URL to extract slug from
- * @returns The last path segment
+ * @returns The last path segment, or empty string for directories
  *
  * @example
+ * // Multi-segment paths - returns last segment
  * getUrlSlug("https://example.com/recipes/chocolate-cake")
  * // Returns: "chocolate-cake"
  *
+ * getUrlSlug("https://example.com/recipes/chocolate-cake/")
+ * // Returns: "chocolate-cake"
+ *
+ * // Single-segment paths ending with '/' are treated as directories
  * getUrlSlug("https://example.com/recipes/")
+ * // Returns: ""
+ *
+ * // Single-segment paths without trailing slash return the segment
+ * getUrlSlug("https://example.com/recipes")
+ * // Returns: "recipes"
+ *
+ * // Root or no path
+ * getUrlSlug("https://example.com/")
  * // Returns: ""
  */
 export function getUrlSlug(url: string): string {
   const parsed = urlPathToDict(url);
   const path = parsed?.path || '';
-  const segments = path.split('/');
-  return segments[segments.length - 1] || '';
+
+  // Filter out empty segments
+  const segments = path.split('/').filter((seg) => seg !== '');
+
+  // No path segments
+  if (segments.length === 0) {
+    return '';
+  }
+
+  // Single segment ending with '/' is treated as a directory (e.g., '/recipes/')
+  // Returns empty string to indicate no slug, just a directory path
+  if (segments.length === 1 && path.endsWith('/')) {
+    return '';
+  }
+
+  // Return the last segment (e.g., 'chocolate-cake' from '/recipes/chocolate-cake/' or '/recipes/chocolate-cake')
+  return segments[segments.length - 1];
 }
