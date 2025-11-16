@@ -7,10 +7,11 @@
  */
 
 import * as cheerio from 'cheerio';
-import { SchemaOrg } from '../parsers/schema-org';
-import { OpenGraph } from '../parsers/opengraph';
 import { ElementNotFoundInHtml } from '../exceptions';
-import type { Recipe, IngredientGroup } from '../types/recipe';
+import { OpenGraph } from '../parsers/opengraph';
+import { SchemaOrg } from '../parsers/schema-org';
+import { settings } from '../settings';
+import type { IngredientGroup, Recipe } from '../types/recipe';
 
 /**
  * Abstract base scraper class
@@ -21,19 +22,102 @@ export abstract class AbstractScraper {
   protected readonly $: cheerio.CheerioAPI;
   protected opengraph: OpenGraph;
   protected schema: SchemaOrg;
+  protected bestImageSelection: boolean;
+
+  /**
+   * Check if Schema.org data is available
+   * Used by factory to determine if wild mode scraping is possible
+   */
+  hasSchema(): boolean {
+    return !!(this.schema && (this.schema as any).data);
+  }
 
   /**
    * Creates a new scraper instance
    *
    * @param html - HTML content of the recipe page
    * @param url - URL of the recipe page
+   * @param bestImage - Whether to enable best image selection. If undefined, uses settings.BEST_IMAGE_SELECTION
    */
-  constructor(html: string, url: string) {
+  constructor(html: string, url: string, bestImage?: boolean) {
     this.pageData = html;
     this.url = url;
     this.$ = cheerio.load(html) as cheerio.CheerioAPI;
     this.opengraph = new OpenGraph(html);
     this.schema = new SchemaOrg(html);
+    this.bestImageSelection = bestImage ?? settings.BEST_IMAGE_SELECTION;
+
+    // Attach plugins as instructed in settings.PLUGINS
+    // Apply plugins per-instance to avoid prototype pollution
+    const methodNames = this._getMethodNames();
+
+    for (const methodName of methodNames) {
+      // Get the current method from the instance's prototype
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      let currentMethod = (Object.getPrototypeOf(this) as Record<string, unknown>)[methodName];
+
+      // Apply plugins in reverse order (outermost plugin first)
+      for (let i = settings.PLUGINS.length - 1; i >= 0; i--) {
+        const plugin = settings.PLUGINS[i];
+        if (plugin.shouldRun(this.host(), methodName)) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any
+          currentMethod = plugin.run(currentMethod as any);
+        }
+      }
+
+      // Replace the method on the instance, binding 'this' to the current instance
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      (this as unknown as Record<string, unknown>)[methodName] =
+        typeof currentMethod === 'function'
+          ? (currentMethod as Function).bind(this)
+          : currentMethod;
+    }
+  }
+
+  /**
+   * Get all method names from the scraper instance
+   * Returns only methods, not properties or constructor
+   */
+  private _getMethodNames(): string[] {
+    const methods: string[] = [];
+    const proto = Object.getPrototypeOf(this);
+
+    // Walk up the prototype chain with safety checks
+    const MAX_DEPTH = 50; // Reasonable limit for prototype chain depth
+    const visited = new Set<object>(); // Track visited prototypes to detect cycles
+
+    let current = proto;
+    let depth = 0;
+
+    while (current && current !== Object.prototype) {
+      // Safety check: prevent infinite loops with maximum depth
+      if (depth >= MAX_DEPTH) {
+        break;
+      }
+
+      // Safety check: detect circular references
+      if (visited.has(current)) {
+        break;
+      }
+      visited.add(current);
+
+      const names = Object.getOwnPropertyNames(current);
+      for (const name of names) {
+        // Skip constructor, private methods (starting with _), and duplicates
+        if (name !== 'constructor' && !name.startsWith('_') && !methods.includes(name)) {
+          const descriptor = Object.getOwnPropertyDescriptor(current, name);
+          // Check if it's a method (function) not a getter/setter or property
+          if (descriptor && typeof descriptor.value === 'function') {
+            methods.push(name);
+          }
+        }
+      }
+
+      current = Object.getPrototypeOf(current);
+      depth++;
+    }
+
+    return methods;
   }
 
   /**
