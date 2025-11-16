@@ -2,7 +2,7 @@
  * Helper functions for accessing shared test data from Python repository
  */
 
-import { readFileSync, readdirSync, existsSync } from 'fs';
+import { existsSync, readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 
 /**
@@ -34,6 +34,7 @@ export function loadTestHtml(domain: string, filename: string): string {
  * @param filename - The test JSON filename (e.g., 'recipe.json')
  * @returns The parsed JSON object
  */
+// biome-ignore lint/suspicious/noExplicitAny: test data can have any structure depending on the test case
 export function loadExpectedJson(domain: string, filename: string): any {
   const path = join(TEST_DATA_PATH, domain, filename);
 

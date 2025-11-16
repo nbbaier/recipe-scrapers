@@ -91,7 +91,8 @@ typescript/
 ├── docs/                   # Approach documents (for reference)
 ├── package.json            # ✅ Dependencies and scripts (COMPLETE)
 ├── tsconfig.json           # ✅ TypeScript configuration (COMPLETE)
-├── jest.config.js          # ✅ Test configuration (COMPLETE)
+├── vitest.config.ts        # ✅ Test configuration (COMPLETE)
+├── biome.json              # ✅ Linting and formatting configuration (COMPLETE)
 ├── STATUS.md               # 📊 Current status tracking (NEW!)
 └── README.md               # 📚 Overview
 ```
@@ -102,26 +103,26 @@ typescript/
 cd typescript
 
 # Install dependencies
-npm install
+bun install
 
 # Build
-npm run build
+bun run build
 
 # Run tests
-npm test
+bun test
 
 # Validate parity with Python version
-npm run validate-parity
+bun run validate-parity
 
 # Compare specific output
-npm run compare -- allrecipes.com
+bun run compare -- allrecipes.com
 
 # Type check
-npm run type-check
+bun run type-check
 
 # Lint and format
-npm run lint:fix
-npm run format
+bun run lint:fix
+bun run format
 ```
 
 ### Parity Validation Scripts

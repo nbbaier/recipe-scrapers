@@ -28,15 +28,15 @@ export class BestImagePlugin extends PluginInterface {
   private static readonly QUERY_WIDTH_PATTERN = /[?&](?:w|width)=(\d{3,5})/i;
   private static readonly QUERY_HEIGHT_PATTERN = /[?&](?:h|height)=(\d{3,5})/i;
 
+  // biome-ignore lint/suspicious/noExplicitAny: decorator pattern requires flexible type signature
   static override run<T extends (...args: any[]) => any>(decorated: T): T {
+    // biome-ignore lint/suspicious/noExplicitAny: decorator needs to preserve 'this' context of any type
     const wrapper = function (this: any, ...args: any[]) {
       if (settings.LOG_LEVEL <= 0) {
         // debug level
         const className = this.constructor.name;
         const methodName = decorated.name;
-        console.debug(
-          `Decorating: ${className}.${methodName}() with BestImagePlugin`
-        );
+        console.debug(`Decorating: ${className}.${methodName}() with BestImagePlugin`);
       }
 
       const image = decorated.apply(this, args);
@@ -58,9 +58,11 @@ export class BestImagePlugin extends PluginInterface {
     return wrapper as T;
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: scraper and image can be of various types from different sources
   private static _collectCandidates(scraper: any, image: any): ImageCandidate[] {
     const candidates: Map<string, ImageCandidate> = new Map();
 
+    // biome-ignore lint/suspicious/noExplicitAny: entry can be string, array, or object with various shapes
     const register = (entry: any, source: string): void => {
       for (const normalized of this._normalizeEntries(entry)) {
         this._mergeCandidate(candidates, normalized, source);
@@ -81,6 +83,7 @@ export class BestImagePlugin extends PluginInterface {
     return Array.from(candidates.values());
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: entry can be string, array, object, or Set with various shapes
   private static *_normalizeEntries(entry: any): Generator<ImageCandidate> {
     if (!entry) {
       return;
@@ -94,8 +97,7 @@ export class BestImagePlugin extends PluginInterface {
     }
 
     if (typeof entry === 'object' && !(entry instanceof Set)) {
-      const url =
-        entry.url || entry['@id'] || entry.contentUrl || entry.contentURL;
+      const url = entry.url || entry['@id'] || entry.contentUrl || entry.contentURL;
       let urlString: string | undefined;
 
       if (Array.isArray(url)) {
@@ -108,12 +110,8 @@ export class BestImagePlugin extends PluginInterface {
         return;
       }
 
-      const width = this._parseDimension(
-        entry.width || entry.pixelWidth || entry.contentWidth
-      );
-      const height = this._parseDimension(
-        entry.height || entry.pixelHeight || entry.contentHeight
-      );
+      const width = this._parseDimension(entry.width || entry.pixelWidth || entry.contentWidth);
+      const height = this._parseDimension(entry.height || entry.pixelHeight || entry.contentHeight);
 
       yield {
         url: urlString.trim(),
@@ -133,6 +131,7 @@ export class BestImagePlugin extends PluginInterface {
   }
 
   private static _collectOpenGraphCandidates(
+    // biome-ignore lint/suspicious/noExplicitAny: scraper instance type varies by implementation
     scraper: any,
     candidates: Map<string, ImageCandidate>
   ): void {
@@ -151,22 +150,14 @@ export class BestImagePlugin extends PluginInterface {
     const metas = $('meta').toArray();
     for (const meta of metas) {
       const $meta = $(meta);
-      const prop = (
-        $meta.attr('property') ||
-        $meta.attr('name') ||
-        ''
-      ).toLowerCase();
+      const prop = ($meta.attr('property') || $meta.attr('name') || '').toLowerCase();
       const content = $meta.attr('content');
 
       if (!content) {
         continue;
       }
 
-      if (
-        prop === 'og:image' ||
-        prop === 'og:image:url' ||
-        prop === 'og:image:secure_url'
-      ) {
+      if (prop === 'og:image' || prop === 'og:image:url' || prop === 'og:image:secure_url') {
         // Start a new image entry
         const url = String(content).trim();
         ogImageData.push({ url, width: null, height: null });
@@ -192,8 +183,8 @@ export class BestImagePlugin extends PluginInterface {
           candidates,
           {
             url: imageData.url,
-            width: imageData.width,
-            height: imageData.height,
+            width: imageData.width ?? null,
+            height: imageData.height ?? null,
           },
           'opengraph'
         );
@@ -240,15 +231,13 @@ export class BestImagePlugin extends PluginInterface {
     existing.sources.add(source);
   }
 
-  private static _maxDimension(
-    current: number | null,
-    newVal: number | null
-  ): number | null {
+  private static _maxDimension(current: number | null, newVal: number | null): number | null {
     if (current === null) return newVal;
     if (newVal === null) return current;
     return Math.max(current, newVal);
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: value can be number, string, or object with nested values
   private static _parseDimension(value: any): number | null {
     if (value === null || value === undefined) {
       return null;
@@ -286,9 +275,7 @@ export class BestImagePlugin extends PluginInterface {
     return null;
   }
 
-  private static _selectBestCandidate(
-    candidates: ImageCandidate[]
-  ): string | null {
+  private static _selectBestCandidate(candidates: ImageCandidate[]): string | null {
     let bestCandidate: ImageCandidate | null = null;
     let bestScore: [number, number, number] = [-1, 0, 0];
 
@@ -297,9 +284,7 @@ export class BestImagePlugin extends PluginInterface {
       if (
         score[0] > bestScore[0] ||
         (score[0] === bestScore[0] && score[1] > bestScore[1]) ||
-        (score[0] === bestScore[0] &&
-          score[1] === bestScore[1] &&
-          score[2] > bestScore[2])
+        (score[0] === bestScore[0] && score[1] === bestScore[1] && score[2] > bestScore[2])
       ) {
         bestCandidate = candidate;
         bestScore = score;
@@ -309,9 +294,7 @@ export class BestImagePlugin extends PluginInterface {
     return bestCandidate?.url || null;
   }
 
-  private static _scoreCandidate(
-    candidate: ImageCandidate
-  ): [number, number, number] {
+  private static _scoreCandidate(candidate: ImageCandidate): [number, number, number] {
     const [width, height] = this._ensureDimensions(candidate);
 
     let area = 0;
@@ -331,9 +314,7 @@ export class BestImagePlugin extends PluginInterface {
     return [area, secure, order];
   }
 
-  private static _ensureDimensions(
-    candidate: ImageCandidate
-  ): [number | null, number | null] {
+  private static _ensureDimensions(candidate: ImageCandidate): [number | null, number | null] {
     let { width, height } = candidate;
 
     if (width && height) {
@@ -351,9 +332,7 @@ export class BestImagePlugin extends PluginInterface {
     return [width, height];
   }
 
-  private static _extractDimensionsFromUrl(
-    url: string
-  ): [number, number] | null {
+  private static _extractDimensionsFromUrl(url: string): [number, number] | null {
     if (!url) {
       return null;
     }

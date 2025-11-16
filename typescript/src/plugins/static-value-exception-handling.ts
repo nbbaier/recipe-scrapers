@@ -5,15 +5,11 @@
  * that a field is not provided by the website.
  */
 
-import {
-  FieldNotProvidedByWebsiteException,
-  StaticValueException,
-} from '../exceptions';
+import { FieldNotProvidedByWebsiteException, StaticValueException } from '../exceptions';
 import { PluginInterface } from './interface';
 
 export class StaticValueExceptionHandlingPlugin extends PluginInterface {
-  static readonly BUG_REPORT_LINK =
-    'https://github.com/hhursev/recipe-scrapers/issues';
+  static readonly BUG_REPORT_LINK = 'https://github.com/hhursev/recipe-scrapers/issues';
 
   static override runOnHosts = ['*'];
   static override runOnMethods = [
@@ -26,7 +22,9 @@ export class StaticValueExceptionHandlingPlugin extends PluginInterface {
     'yields',
   ];
 
+  // biome-ignore lint/suspicious/noExplicitAny: decorator pattern requires flexible type signature
   static override run<T extends (...args: any[]) => any>(decorated: T): T {
+    // biome-ignore lint/suspicious/noExplicitAny: decorator needs to preserve 'this' context of any type
     const wrapper = function (this: any, ...args: any[]) {
       try {
         return decorated.apply(this, args);

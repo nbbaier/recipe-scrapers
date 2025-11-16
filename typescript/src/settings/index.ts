@@ -18,6 +18,7 @@ export interface Settings {
   SUPPRESS_EXCEPTIONS: boolean;
 
   /** Default values to return when exceptions are suppressed */
+  // biome-ignore lint/suspicious/noExplicitAny: return values can be of any type depending on the method
   ON_EXCEPTION_RETURN_VALUES: Record<string, any>;
 
   /** Logging level (0=debug, 1=info, 2=warn, 3=error) */
@@ -72,11 +73,12 @@ export function resetSettings(): void {
 /**
  * Deep merge helper for nested objects
  */
+// biome-ignore lint/suspicious/noExplicitAny: deep merge utility needs to work with arbitrary object types
 function deepMerge(target: any, source: any): any {
   const output = { ...target };
-  
+
   if (isObject(target) && isObject(source)) {
-    Object.keys(source).forEach(key => {
+    Object.keys(source).forEach((key) => {
       if (isObject(source[key])) {
         if (!(key in target)) {
           output[key] = source[key];
@@ -88,10 +90,11 @@ function deepMerge(target: any, source: any): any {
       }
     });
   }
-  
+
   return output;
 }
 
+// biome-ignore lint/suspicious/noExplicitAny: type guard needs to check if item is an object of any type
 function isObject(item: any): boolean {
   return item && typeof item === 'object' && !Array.isArray(item);
 }
@@ -107,9 +110,9 @@ export function updateSettings(customSettings: Partial<Settings>): void {
       settings.ON_EXCEPTION_RETURN_VALUES,
       customSettings.ON_EXCEPTION_RETURN_VALUES
     );
-    
+
     // Remove from customSettings to avoid overwriting with shallow assign
-    const { ON_EXCEPTION_RETURN_VALUES, ...rest } = customSettings;
+    const { ON_EXCEPTION_RETURN_VALUES: _ON_EXCEPTION_RETURN_VALUES, ...rest } = customSettings;
     Object.assign(settings, rest);
   } else {
     Object.assign(settings, customSettings);
@@ -127,7 +130,7 @@ export function configureDefaultPlugins(plugins: (typeof PluginInterface)[]): vo
     console.warn('configureDefaultPlugins() has already been called. Ignoring subsequent call.');
     return;
   }
-  
+
   settings.PLUGINS = [...plugins];
   defaultSettings.PLUGINS = [...plugins];
   pluginsConfigured = true;
