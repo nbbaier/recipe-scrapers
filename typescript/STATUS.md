@@ -1,8 +1,8 @@
 # TypeScript Port Status
 
 - **Last Updated:** 2025-11-16
-- **Current Phase:** Phase 4 (Testing & Site Scrapers) - **IN PROGRESS** 🚧
-- **Overall Progress:** ~60% complete (by phases), ~25% complete (by LOC: ~2,948 / ~11,700)
+- **Current Phase:** Phase 4 (Site Scrapers) - **IN PROGRESS** 
+- **Overall Progress:** ~62% complete (by phases), ~28% complete (by LOC: ~3,338 / ~11,850)
   - _Progress by phases completed; LOC-based progress shown for transparency._
 ---
 
@@ -10,7 +10,7 @@
 
 **MAJOR MILESTONE:** The TypeScript port has completed the **entire core architecture** AND comprehensive **test coverage**! All utilities, parsers, the abstract scraper base class, the complete plugin system (8 plugins), factory pattern, and settings system are fully implemented, thoroughly tested, and building successfully. **268 tests passing with 0 failures!** The foundation is 100% ready for site-specific scrapers. The chosen approach is **Approach 4 (Hybrid)** - develop here in the Python repo for easy reference, then extract to a separate repo once complete.
 
-### What's Working ✅
+### What's Working 
 
 - Project structure and configuration
 - TypeScript build tooling (tsup, vitest, biome) - **builds successfully!**
@@ -24,17 +24,17 @@
 - **Complete Plugin System** (8 plugins, ~846 lines)
 - **Settings System** (configurable, user-customizable)
 - **Factory Pattern** (scraper registry, wild mode support)
-- **Comprehensive test suite** (268 tests passing, 12 test files) ✨ **NEW!**
+- **Comprehensive test suite** (268 tests passing, 12 test files)  **NEW!**
   - 150 utility tests (94.71% coverage)
-  - 100+ SchemaOrg parser tests ✨ **NEW!**
-  - 15+ OpenGraph parser tests ✨ **NEW!**
-  - 25+ Factory pattern tests ✨ **NEW!**
-  - 22+ Settings system tests ✨ **NEW!**
+  - 100+ SchemaOrg parser tests  **NEW!**
+  - 15+ OpenGraph parser tests  **NEW!**
+  - 25+ Factory pattern tests  **NEW!**
+  - 22+ Settings system tests  **NEW!**
   - 11 AbstractScraper tests
 
-### What's Not Implemented ❌
+### What's Not Implemented 
 
-- **All 518 site-specific scrapers** - Phase 4 (Next up!)
+- **Remaining 508 site-specific scrapers** - Phase 4 (in progress, 10/518 complete!)
 - Plugin-specific tests (plugins work, but need dedicated test files)
 - Parity validation scripts (scaffolded but not yet functional)
 - Microdata/RDFa support (deferred, JSON-LD covers 90%+)
@@ -43,96 +43,103 @@
 
 ## Detailed Status
 
-### 1. Core Architecture (100% Complete) 🎉
+### 1. Core Architecture (100% Complete) 
 
 | Component | Status | Lines | Notes |
 |-----------|--------|-------|-------|
-| **AbstractScraper** | ✅ Complete | 310 | Base class with 20+ methods, toJson(), language detection |
-| **SchemaOrg Parser** | ✅ Complete | 642 | JSON-LD parsing (90%+ coverage), handles @graph, references |
-| **OpenGraph Parser** | ✅ Complete | 73 | Fallback metadata extraction (site name, image) |
-| **Factory Pattern** | ✅ Complete | 207 | Scraper registry, selection, wild mode support ✨ NEW! |
-| **SchemaScraper** | ✅ Complete | 102 | Generic Schema.org scraper for wild mode ✨ NEW! |
+| **AbstractScraper** |  Complete | 310 | Base class with 20+ methods, toJson(), language detection |
+| **SchemaOrg Parser** |  Complete | 642 | JSON-LD parsing (90%+ coverage), handles @graph, references |
+| **OpenGraph Parser** |  Complete | 73 | Fallback metadata extraction (site name, image) |
+| **Factory Pattern** |  Complete | 207 | Scraper registry, selection, wild mode support  NEW! |
+| **SchemaScraper** |  Complete | 102 | Generic Schema.org scraper for wild mode  NEW! |
 
 **Progress:** Core architecture 100% complete! Factory pattern enables site-specific scrapers.
 **Note:** Microdata/RDFa support deferred (can add later, JSON-LD covers 90%+ of sites)
 
-### 2. Plugin System (100% Complete) 🎉
+### 2. Plugin System (100% Complete) 
 
 | Plugin | Status | Lines | Notes |
 |--------|--------|-------|-------|
-| **PluginInterface** | ✅ Complete | 58 | Base class for all plugins ✨ NEW! |
-| **ExceptionHandlingPlugin** | ✅ Complete | 56 | Graceful error handling ✨ NEW! |
-| **BestImagePlugin** | ✅ Complete | 367 | Smart image selection with dimensions ✨ NEW! |
-| **StaticValueExceptionHandlingPlugin** | ✅ Complete | 62 | Handle static values ✨ NEW! |
-| **HTMLTagStripperPlugin** | ✅ Complete | 74 | Strip HTML from text ✨ NEW! |
-| **NormalizeStringPlugin** | ✅ Complete | 34 | Normalize whitespace ✨ NEW! |
-| **OpenGraphImageFetchPlugin** | ✅ Complete | 53 | Fetch images from OG metadata ✨ NEW! |
-| **OpenGraphFillPlugin** | ✅ Complete | 56 | Fallback to OpenGraph ✨ NEW! |
-| **SchemaOrgFillPlugin** | ✅ Complete | 86 | Auto-fill from schema.org ✨ NEW! |
+| **PluginInterface** |  Complete | 58 | Base class for all plugins  NEW! |
+| **ExceptionHandlingPlugin** |  Complete | 56 | Graceful error handling  NEW! |
+| **BestImagePlugin** |  Complete | 367 | Smart image selection with dimensions  NEW! |
+| **StaticValueExceptionHandlingPlugin** |  Complete | 62 | Handle static values  NEW! |
+| **HTMLTagStripperPlugin** |  Complete | 74 | Strip HTML from text  NEW! |
+| **NormalizeStringPlugin** |  Complete | 34 | Normalize whitespace  NEW! |
+| **OpenGraphImageFetchPlugin** |  Complete | 53 | Fetch images from OG metadata  NEW! |
+| **OpenGraphFillPlugin** |  Complete | 56 | Fallback to OpenGraph  NEW! |
+| **SchemaOrgFillPlugin** |  Complete | 86 | Auto-fill from schema.org  NEW! |
 
 **Total Plugin Code:** ~846 lines
 **Blockers:** None! All plugins implemented and integrated.
 
-### 2a. Settings System (100% Complete) 🎉
+### 2a. Settings System (100% Complete) 
 
 | Component | Status | Lines | Notes |
 |-----------|--------|-------|-------|
-| **Settings** | ✅ Complete | 90 | Configuration system with defaults ✨ NEW! |
+| **Settings** |  Complete | 90 | Configuration system with defaults  NEW! |
 
 **Progress:** Settings system allows users to customize plugin behavior, logging, and exception handling.
 
-### 3. Utilities (100% Complete) ✅
+### 3. Utilities (100% Complete) 
 
 | Utility | Status | Python Lines | TS Lines | Notes |
 |---------|--------|--------------|----------|-------|
-| Duration parsing (ISO 8601) | ✅ Complete | ~50 | 131 | PT1H30M → 90 minutes, handles text formats |
-| Yield parsing | ✅ Complete | ~60 | 157 | "4-6 servings" → "6 servings" |
-| String normalization | ✅ Complete | ~30 | 83 | Whitespace, HTML entities, tag removal |
-| CSV to tags | ✅ Complete | ~15 | 14 | Convert comma-separated values |
-| Diet name formatting | ✅ Complete | ~25 | 38 | Schema.org diet URLs → names |
-| Fraction extraction | ✅ Complete | ~30 | 81 | Unicode fractions (½, ⅓, etc.) |
-| URL utilities | ✅ Complete | ~20 | 95 | Parse URL, get hostname, get slug |
-| Helper utilities | ✅ Complete | ~25 | 97 | changeKeys, getEquipment, nutrition keys |
+| Duration parsing (ISO 8601) |  Complete | ~50 | 131 | PT1H30M → 90 minutes, handles text formats |
+| Yield parsing |  Complete | ~60 | 157 | "4-6 servings" → "6 servings" |
+| String normalization |  Complete | ~30 | 83 | Whitespace, HTML entities, tag removal |
+| CSV to tags |  Complete | ~15 | 14 | Convert comma-separated values |
+| Diet name formatting |  Complete | ~25 | 38 | Schema.org diet URLs → names |
+| Fraction extraction |  Complete | ~30 | 81 | Unicode fractions (½, ⅓, etc.) |
+| URL utilities |  Complete | ~20 | 95 | Parse URL, get hostname, get slug |
+| Helper utilities |  Complete | ~25 | 97 | changeKeys, getEquipment, nutrition keys |
+| **Grouping utilities** |  Complete | ~150 | 120 | Ingredient grouping by sections  **NEW!** |
 
 **Dependencies:** `luxon` (installed), `cheerio` (installed)
 
 **Test Coverage:** 94.71% statements, 93.04% branches, 89.47% functions
 **Tests:** 150 passing (all utility tests complete)
 
-### 4. Site-Specific Scrapers (0/518 Complete)
+### 4. Site-Specific Scrapers (10/518 Complete)  **NEW!**
 
-- **Priority scrapers** (not started):
-  - allrecipes.com
-  - foodnetwork.com
-  - seriouseats.com
-  - bbcgoodfood.com
-  - bonappetit.com
-  - epicurious.com
-  - delish.com
-  - simplyrecipes.com
-  - tasty.co
-  - thepioneerwoman.com
+- **Priority scrapers** ( 10/10 COMPLETE!):
+  -  allrecipes.com - Minimal scraper (relies on Schema.org)
+  -  foodnetwork.com - Custom author/siteName extraction
+  -  seriouseats.com - Minimal scraper (relies on Schema.org)
+  -  bbcgoodfood.com - Ingredient grouping support
+  -  bonappetit.com - Override totalTime() to return null
+  -  epicurious.com - Custom author extraction from HTML
+  -  delish.com - Ingredient grouping support
+  -  simplyrecipes.com - Custom instructions parsing
+  -  tasty.co - Ingredient grouping support
+  -  thepioneerwoman.com - Ingredient grouping + custom instructions
 
 - **Remaining:** 508 scrapers
 
-**Blockers:** Requires AbstractScraper, plugins, and parsers
+**Status:** First 10 priority scrapers implemented and registered with factory! All build successfully and tests pass (268 passing).
 
-### 5. Testing Infrastructure (85% Complete) ✨ **MAJOR UPDATE!**
+**Implementation Patterns:**
+- Minimal scrapers (3): Just extend AbstractScraper and define host()
+- Custom field overrides (3): Override specific methods like author(), totalTime()
+- Ingredient grouping (4): Use groupIngredients() utility for sectioned ingredients
+- Custom parsing (2): Override instructions() with custom HTML parsing
+
+### 5. Testing Infrastructure (85% Complete)  **MAJOR UPDATE!**
 
 | Component | Status | Tests | Notes |
 |-----------|--------|-------|-------|
-| Vitest configuration | ✅ Complete | - | Set up and working |
-| Test data helpers | ✅ Complete | 5 | Functions to load shared test data |
-| Utility tests | ✅ Complete | 150 | 94.71% coverage |
-| AbstractScraper tests | ✅ Complete | 11 | Base class functionality |
-| **SchemaOrg parser tests** | ✅ Complete | 100+ | **NEW!** All parsing scenarios |
-| **OpenGraph parser tests** | ✅ Complete | 15+ | **NEW!** Meta tag extraction |
-| **Factory pattern tests** | ✅ Complete | 25+ | **NEW!** Registration, wild mode |
-| **Settings system tests** | ✅ Complete | 22+ | **NEW!** Configuration management |
-| Plugin-specific tests | ⚠️ Pending | 0 | Plugins work but need dedicated tests |
-| Site scraper tests | ❌ Not started | 0 | No scrapers implemented yet |
-| Parity validation script | ⚠️ Scaffolded | - | Exists but not yet functional |
-| Output comparison script | ⚠️ Scaffolded | - | Exists but not yet functional |
+| Vitest configuration |  Complete | - | Set up and working |
+| Test data helpers |  Complete | 5 | Functions to load shared test data |
+| Utility tests |  Complete | 150 | 94.71% coverage |
+| AbstractScraper tests |  Complete | 11 | Base class functionality |
+| **SchemaOrg parser tests** |  Complete | 100+ | **NEW!** All parsing scenarios |
+| **OpenGraph parser tests** |  Complete | 15+ | **NEW!** Meta tag extraction |
+| **Factory pattern tests** |  Complete | 25+ | **NEW!** Registration, wild mode |
+| **Settings system tests** |  Complete | 22+ | **NEW!** Configuration management |
+| Plugin-specific tests |  Pending | 0 | Plugins work but need dedicated tests |
+| Site scraper tests |  Not started | 0 | No scrapers implemented yet |
+| Parity validation script |  Scaffolded | - | Exists but not yet functional |
+| Output comparison script |  Scaffolded | - | Exists but not yet functional |
 
 **Total Tests:** 268 passing across 12 test files
 **Status:** Core components fully tested, ready for site scrapers
@@ -141,10 +148,10 @@
 
 | Component | Status | Notes |
 |-----------|--------|-------|
-| Recipe interface | ✅ Complete | All fields defined |
-| IngredientGroup interface | ✅ Complete | Grouped ingredients |
-| Nutrients interface | ✅ Complete | Nutritional information |
-| Exception classes | ✅ Complete | All 5 custom exceptions |
+| Recipe interface |  Complete | All fields defined |
+| IngredientGroup interface |  Complete | Grouped ingredients |
+| Nutrients interface |  Complete | Nutritional information |
+| Exception classes |  Complete | All 5 custom exceptions |
 
 **Status:** Type system is fully defined and matches Python version
 
@@ -152,12 +159,12 @@
 
 | Tool | Status | Notes |
 |------|--------|-------|
-| TypeScript compiler | ✅ Complete | Strict mode enabled |
-| tsup (bundler) | ✅ Complete | Builds CJS + ESM |
-| Jest (testing) | ✅ Complete | Ready for tests |
-| ESLint | ✅ Complete | TypeScript rules configured |
-| Prettier | ✅ Complete | Code formatting |
-| package.json scripts | ✅ Complete | All dev workflows ready |
+| TypeScript compiler |  Complete | Strict mode enabled |
+| tsup (bundler) |  Complete | Builds CJS + ESM |
+| Jest (testing) |  Complete | Ready for tests |
+| ESLint |  Complete | TypeScript rules configured |
+| Prettier |  Complete | Code formatting |
+| package.json scripts |  Complete | All dev workflows ready |
 
 **Status:** Development environment is production-ready
 
@@ -181,68 +188,81 @@
 
 ## Files Implemented
 
-### Source Files (27 files) ✨ +10 NEW!
+### Source Files (39 files)  +12 NEW!
 
 ```
 typescript/src/
-├── exceptions.ts          ✅ 117 lines - All 10 exception classes ✨ UPDATED!
-├── index.ts               ✅ 77 lines - Main exports with plugin initialization ✨ UPDATED!
-├── factory.ts             ✅ 207 lines - Factory pattern, scraper registry ✨ NEW!
+├── exceptions.ts           117 lines - All 10 exception classes  UPDATED!
+├── index.ts                77 lines - Main exports with plugin initialization  UPDATED!
+├── factory.ts              207 lines - Factory pattern, scraper registry  NEW!
 ├── types/
-│   └── recipe.ts          ✅ 139 lines - Complete type definitions
+│   └── recipe.ts           139 lines - Complete type definitions
 ├── settings/
-│   └── index.ts           ✅ 90 lines - Settings system ✨ NEW!
+│   └── index.ts            90 lines - Settings system  NEW!
 ├── plugins/
-│   ├── interface.ts       ✅ 58 lines - Base plugin interface ✨ NEW!
-│   ├── exception-handling.ts            ✅ 56 lines ✨ NEW!
-│   ├── best-image.ts                    ✅ 367 lines ✨ NEW!
-│   ├── static-value-exception-handling.ts  ✅ 62 lines ✨ NEW!
-│   ├── html-tag-stripper.ts             ✅ 74 lines ✨ NEW!
-│   ├── normalize-string.ts              ✅ 34 lines ✨ NEW!
-│   ├── opengraph-image-fetch.ts         ✅ 53 lines ✨ NEW!
-│   ├── opengraph-fill.ts                ✅ 56 lines ✨ NEW!
-│   ├── schemaorg-fill.ts                ✅ 86 lines ✨ NEW!
-│   └── index.ts           ✅ 17 lines - Plugin exports ✨ NEW!
+│   ├── interface.ts        58 lines - Base plugin interface  NEW!
+│   ├── exception-handling.ts             56 lines  NEW!
+│   ├── best-image.ts                     367 lines  NEW!
+│   ├── static-value-exception-handling.ts   62 lines  NEW!
+│   ├── html-tag-stripper.ts              74 lines  NEW!
+│   ├── normalize-string.ts               34 lines  NEW!
+│   ├── opengraph-image-fetch.ts          53 lines  NEW!
+│   ├── opengraph-fill.ts                 56 lines  NEW!
+│   ├── schemaorg-fill.ts                 86 lines  NEW!
+│   └── index.ts            17 lines - Plugin exports  NEW!
 ├── parsers/
-│   ├── schema-org.ts      ✅ 642 lines - Schema.org JSON-LD parser
-│   ├── opengraph.ts       ✅ 73 lines - OpenGraph metadata parser
-│   └── index.ts           ✅ 5 lines - Parser exports
+│   ├── schema-org.ts       642 lines - Schema.org JSON-LD parser
+│   ├── opengraph.ts        73 lines - OpenGraph metadata parser
+│   └── index.ts            5 lines - Parser exports
 ├── scrapers/
-│   ├── abstract.ts        ✅ 310 lines - Abstract scraper base class
-│   └── index.ts           ✅ 4 lines - Scraper exports
+│   ├── abstract.ts         310 lines - Abstract scraper base class
+│   ├── index.ts            4 lines - Scraper exports
+│   └── sites/             **NEW!** 10 site-specific scrapers
+│       ├── allrecipes.ts         14 lines - Minimal scraper
+│       ├── bbcgoodfood.ts        24 lines - Ingredient grouping
+│       ├── bonappetit.ts         20 lines - Override totalTime()
+│       ├── delish.ts             24 lines - Ingredient grouping
+│       ├── epicurious.ts         23 lines - Custom author extraction
+│       ├── foodnetwork.ts        37 lines - Custom author/siteName
+│       ├── seriouseats.ts        14 lines - Minimal scraper
+│       ├── simplyrecipes.ts      36 lines - Custom instructions
+│       ├── tasty.ts              24 lines - Ingredient grouping
+│       ├── thepioneerwoman.ts    38 lines - Grouping + instructions
+│       └── index.ts              11 lines - Site scraper exports
 └── utils/
-    ├── fractions.ts       ✅ 81 lines - Unicode fraction parsing
-    ├── time.ts            ✅ 131 lines - Duration/time parsing
-    ├── strings.ts         ✅ 167 lines - Normalization, CSV, diet formatting
-    ├── yields.ts          ✅ 157 lines - Recipe yield parsing
-    ├── url.ts             ✅ 107 lines - URL parsing utilities
-    ├── helpers.ts         ✅ 97 lines - changeKeys, equipment, nutrition
-    └── index.ts           ✅ 36 lines - Utility exports
+    ├── fractions.ts        81 lines - Unicode fraction parsing
+    ├── time.ts             131 lines - Duration/time parsing
+    ├── strings.ts          167 lines - Normalization, CSV, diet formatting
+    ├── yields.ts           157 lines - Recipe yield parsing
+    ├── url.ts              107 lines - URL parsing utilities
+    ├── helpers.ts          97 lines - changeKeys, equipment, nutrition
+    ├── grouping.ts         120 lines - Ingredient grouping  NEW!
+    └── index.ts            38 lines - Utility exports (updated)
 ```
 
-### Test Files (12 files) ✨ **UPDATED!**
+### Test Files (12 files)  **UPDATED!**
 
 ```
 typescript/tests/
 ├── helpers/
-│   └── test-data.ts           ✅ 94 lines - Test data loading helpers
+│   └── test-data.ts            94 lines - Test data loading helpers
 └── unit/
-    ├── test-data.test.ts      ✅ 95 lines - Tests for test helpers
-    ├── factory.test.ts        ✅ 310 lines - Factory & scraper registry tests ✨ NEW!
+    ├── test-data.test.ts       95 lines - Tests for test helpers
+    ├── factory.test.ts         310 lines - Factory & scraper registry tests  NEW!
     ├── parsers/
-    │   ├── schema-org.test.ts ✅ 867 lines - SchemaOrg parser tests ✨ NEW!
-    │   └── opengraph.test.ts  ✅ 205 lines - OpenGraph parser tests ✨ NEW!
+    │   ├── schema-org.test.ts  867 lines - SchemaOrg parser tests  NEW!
+    │   └── opengraph.test.ts   205 lines - OpenGraph parser tests  NEW!
     ├── settings/
-    │   └── index.test.ts      ✅ 267 lines - Settings system tests ✨ NEW!
+    │   └── index.test.ts       267 lines - Settings system tests  NEW!
     ├── scrapers/
-    │   └── abstract.test.ts   ✅ 95 lines - AbstractScraper tests
+    │   └── abstract.test.ts    95 lines - AbstractScraper tests
     └── utils/
-        ├── fractions.test.ts  ✅ 275 lines - Fraction parsing tests
-        ├── time.test.ts       ✅ 500 lines - Duration/time parsing tests
-        ├── strings.test.ts    ✅ 475 lines - String utility tests
-        ├── yields.test.ts     ✅ 385 lines - Yield parsing tests
-        ├── url.test.ts        ✅ 360 lines - URL utility tests
-        └── helpers.test.ts    ✅ 340 lines - Helper utility tests
+        ├── fractions.test.ts   275 lines - Fraction parsing tests
+        ├── time.test.ts        500 lines - Duration/time parsing tests
+        ├── strings.test.ts     475 lines - String utility tests
+        ├── yields.test.ts      385 lines - Yield parsing tests
+        ├── url.test.ts         360 lines - URL utility tests
+        └── helpers.test.ts     340 lines - Helper utility tests
 ```
 
 **Total Test LOC:** ~4,173 lines (+1,649 new lines)
@@ -252,44 +272,44 @@ typescript/tests/
 
 ```
 typescript/scripts/
-├── compare-outputs.ts     ⚠️ 7,789 bytes - Scaffolded, not functional
-└── validate-parity.ts     ⚠️ 9,581 bytes - Scaffolded, not functional
+├── compare-outputs.ts      7,789 bytes - Scaffolded, not functional
+└── validate-parity.ts      9,581 bytes - Scaffolded, not functional
 ```
 
 ### Configuration Files (6 files)
 
 ```
 typescript/
-├── package.json           ✅ Complete
-├── tsconfig.json          ✅ Complete
-├── jest.config.js         ✅ Complete (assumed)
-├── .eslintrc.js           ✅ Complete (assumed)
-├── .prettierrc            ✅ Complete (assumed)
-└── README.md              ⚠️ Needs updating
+├── package.json            Complete
+├── tsconfig.json           Complete
+├── jest.config.js          Complete (assumed)
+├── .eslintrc.js            Complete (assumed)
+├── .prettierrc             Complete (assumed)
+└── README.md               Needs updating
 ```
 
 ---
 
 ## Next Steps (Priority Order)
 
-### ✅ COMPLETED (Weeks 1-5)
+###  COMPLETED (Weeks 1-5)
 
-1. ✅ **Implement core utilities** (`utils/`) - DONE!
-2. ✅ **Implement Schema.org JSON-LD parser** - DONE!
-3. ✅ **Implement OpenGraph parser** - DONE!
-4. ✅ **Implement AbstractScraper base class** - DONE!
-5. ✅ **Implement plugin system architecture** - DONE!
-6. ✅ **Implement all 8 plugins** - DONE!
-7. ✅ **Implement factory pattern** - DONE!
-8. ✅ **Implement settings system** - DONE!
-9. ✅ **Add comprehensive tests for core components** - DONE! ✨
-   - ✅ SchemaOrg parser tests (100+ tests)
-   - ✅ OpenGraph parser tests (15+ tests)
-   - ✅ Factory pattern tests (25+ tests)
-   - ✅ Settings system tests (22+ tests)
-   - ✅ **268 tests passing, 0 failures!**
+1.  **Implement core utilities** (`utils/`) - DONE!
+2.  **Implement Schema.org JSON-LD parser** - DONE!
+3.  **Implement OpenGraph parser** - DONE!
+4.  **Implement AbstractScraper base class** - DONE!
+5.  **Implement plugin system architecture** - DONE!
+6.  **Implement all 8 plugins** - DONE!
+7.  **Implement factory pattern** - DONE!
+8.  **Implement settings system** - DONE!
+9.  **Add comprehensive tests for core components** - DONE! 
+   -  SchemaOrg parser tests (100+ tests)
+   -  OpenGraph parser tests (15+ tests)
+   -  Factory pattern tests (25+ tests)
+   -  Settings system tests (22+ tests)
+   -  **268 tests passing, 0 failures!**
 
-**Status:** Core architecture is 100% complete with comprehensive test coverage! 🎉
+**Status:** Core architecture is 100% complete with comprehensive test coverage! 
 
 ### Immediate Next (Week 6)
 
@@ -344,7 +364,7 @@ typescript/
 
 ## Known Issues / Decisions Resolved
 
-1. ✅ **Plugin System Implementation** - RESOLVED
+1.  **Plugin System Implementation** - RESOLVED
    - Chose Higher-Order Functions (HOF) approach
    - Used function wrapping with proper TypeScript typing
    - Successfully implemented all 8 plugins
@@ -374,39 +394,39 @@ typescript/
 
 | Component | Python LOC | TypeScript LOC (estimated) | TypeScript LOC (actual) | Status |
 |-----------|------------|---------------------------|------------------------|--------|
-| Core (abstract, parsers, factory) | ~1,200 | ~1,400 | **~1,232** | **100%** ✅ |
-| Plugins + Settings | ~800 | ~950 | **~936** | **100%** ✅ |
-| Utilities | ~300 | ~350 | **~780** | **100%** ✅ |
-| Site scrapers (518) | ~8,000 | ~9,000 | 0 | 0% |
-| **Total** | **~10,300** | **~11,700** | **~2,948** | **~55%** |
+| Core (abstract, parsers, factory) | ~1,200 | ~1,400 | **~1,232** | **100%**  |
+| Plugins + Settings | ~800 | ~950 | **~936** | **100%**  |
+| Utilities (inc. grouping) | ~450 | ~500 | **~900** | **100%**  |
+| Site scrapers (518) | ~8,000 | ~9,000 | **~270** (10 scrapers) | **~2%** (10/518)  **NEW!** |
+| **Total** | **~10,450** | **~11,850** | **~3,338** | **~28%** |
 
-**Progress:** Core architecture complete! ~2,948 lines of production code implemented.
+**Progress:** Core architecture 100% complete! First 10 site scrapers implemented! ~3,338 lines of production code.
 
-### Test Coverage ✨ **UPDATED!**
+### Test Coverage  **UPDATED!**
 
 - **Python version:** High coverage, comprehensive tests
 - **TypeScript version:**
-  - Test helpers: 100% covered ✅
-  - Utilities: 94.71% statement coverage, 93.04% branch coverage ✅
-  - **SchemaOrg parser: 100+ tests (comprehensive)** ✅ **NEW!**
-  - **OpenGraph parser: 15+ tests (comprehensive)** ✅ **NEW!**
-  - **Factory pattern: 25+ tests (comprehensive)** ✅ **NEW!**
-  - **Settings system: 22+ tests (comprehensive)** ✅ **NEW!**
-  - AbstractScraper: 11 tests ✅
-  - Plugins: Tested indirectly via integration tests ⚠️
+  - Test helpers: 100% covered 
+  - Utilities: 94.71% statement coverage, 93.04% branch coverage 
+  - **SchemaOrg parser: 100+ tests (comprehensive)**  **NEW!**
+  - **OpenGraph parser: 15+ tests (comprehensive)**  **NEW!**
+  - **Factory pattern: 25+ tests (comprehensive)**  **NEW!**
+  - **Settings system: 22+ tests (comprehensive)**  **NEW!**
+  - AbstractScraper: 11 tests 
+  - Plugins: Tested indirectly via integration tests 
   - **Total: 268 tests passing, 0 failures** 🎯
   - **Target:** 90%+ coverage before extraction
-  - **Current:** Core components comprehensively tested! 🎉
+  - **Current:** Core components comprehensively tested! 
 
 ### Timeline Estimates
 
 | Phase | Duration | Status |
 |-------|----------|--------|
-| Phase 0: Setup | 1 week | ✅ Complete (2025-11-12) |
-| Phase 1: Utilities | 2 weeks | ✅ Complete (2025-11-15) |
-| Phase 2: Core Architecture | 3 weeks | ✅ Complete (2025-11-15) |
-| Phase 3: Plugins & Factory | 1 week | ✅ Complete (2025-11-16) |
-| Phase 3a: Core Tests | 0.5 weeks | ✅ **Complete!** (2025-11-16) 🎉 |
+| Phase 0: Setup | 1 week |  Complete (2025-11-12) |
+| Phase 1: Utilities | 2 weeks |  Complete (2025-11-15) |
+| Phase 2: Core Architecture | 3 weeks |  Complete (2025-11-15) |
+| Phase 3: Plugins & Factory | 1 week |  Complete (2025-11-16) |
+| Phase 3a: Core Tests | 0.5 weeks |  **Complete!** (2025-11-16)  |
 | Phase 4: Site Scrapers | 4-6 weeks | ⏭️ **Next up** |
 | Phase 5: Parity Validation | 2 weeks | ⏸️ Not started |
 | Phase 6: Documentation & Polish | 1 week | ⏸️ Not started |
